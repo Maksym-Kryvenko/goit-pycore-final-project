@@ -1,10 +1,20 @@
-"""В utils додати функції валідації по регуляркам email + phone + date(має валідувати коректність дати + день народження був у минулому)"""
-
 import re
 
 
+def check_name(name: str) -> bool:
+    """
+    Validate that name is not empty and contains no digits.
+    """
+    name = name.strip()
+    if not name or any(char.isdigit() for char in name):
+        return False
+    return True
+
+
 def check_email(email: str) -> bool:
-    """Validate email"""
+    """
+    Validate email
+    """
     pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
     return re.match(pattern, email) is not None
 
@@ -13,8 +23,10 @@ def check_phone(phone: str) -> bool:
     """
     Validate that the phone number consists of exactly 10 digits.
     """
-    pattern = r'^\d{10}$'
-    return re.fullmatch(pattern, phone) is not None
+    phone_number = phone.strip().replace(" ", "")
+    phone_number = phone_number[phone_number.index("0") :]
+    pattern = r'(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})'
+    return re.fullmatch(pattern, phone_number) is not None
 
 
 def check_date(date_str: str) -> bool:
