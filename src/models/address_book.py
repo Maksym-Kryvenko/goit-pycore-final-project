@@ -1,37 +1,29 @@
-from typing import Dict, List, Optional
+from typing import List, Optional
+from collections import UserDict
 from .contact import Contact
 
 
-class AddressBook:
+class AddressBook(UserDict):
     """AddressBook model to manage contacts."""
     
     def __init__(self):
-        self._contacts: Dict[str, Contact] = {}
-    
-    # Contacts property
-    @property
-    def contacts(self) -> Dict[str, Contact]:
-        return self._contacts
+        super().__init__()
     
     def add_contact(self, contact: Contact) -> None:
         """Add a new contact to the address book."""
-        if contact.name in self._contacts:
-            raise ValueError(f"Contact with name '{contact.name}' already exists")
-        self._contacts[contact.name] = contact
+        if contact.name.value in self.data:
+            raise ValueError(f"Contact with name '{contact.name.value}' already exists")
+        self.data[contact.name.value] = contact
     
     def remove_contact(self, name: str) -> None:
         """Remove a contact from the address book."""
-        if name not in self._contacts:
+        if name not in self.data:
             raise ValueError(f"Contact with name '{name}' not found")
-        del self._contacts[name]
-    
-    def get_contact(self, name: str) -> Optional[Contact]:
-        """Get a contact by name."""
-        return self._contacts.get(name)
+        del self.data[name]
     
     def update_contact(self, name: str, **kwargs) -> None:
         """Update contact fields."""
-        contact = self.get_contact(name)
+        contact = self.data.get(name)
         if not contact:
             raise ValueError(f"Contact with name '{name}' not found")
         
@@ -43,24 +35,21 @@ class AddressBook:
         """Search contacts by name, phone, or email."""
         query = query.lower()
         results = []
-        for contact in self._contacts.values():
-            if (query in contact.name.lower() or
-                (contact.phone and query in contact.phone.lower()) or
-                (contact.email and query in contact.email.lower())):
+        for contact in self.data.values():
+            if (query in contact.name.value.lower() or
+                (contact.phone.value and query in contact.phone.value.lower()) or
+                (contact.email.value and query in contact.email.value.lower())):
                 results.append(contact)
         return results
     
     def get_all_contacts(self) -> List[Contact]:
         """Get all contacts."""
-        return list(self._contacts.values())
-    
-    def __len__(self) -> int:
-        return len(self._contacts)
+        return list(self.data.values())
     
     def __str__(self) -> str:
-        if not self._contacts:
+        if not self.data:
             return "AddressBook is empty"
-        return f"AddressBook with {len(self._contacts)} contact(s)"
+        return f"AddressBook with {len(self.data)} contact(s)"
     
     def __repr__(self) -> str:
-        return f"AddressBook(contacts={len(self._contacts)})"
+        return f"AddressBook(contacts={len(self.data)})"

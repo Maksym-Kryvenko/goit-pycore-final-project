@@ -1,5 +1,5 @@
-from datetime import datetime
 from typing import Optional
+from .field import Name, Phone, Email, Address, Birthday
 
 
 class Contact:
@@ -11,72 +11,25 @@ class Contact:
         phone: Optional[str] = None,
         email: Optional[str] = None,
         address: Optional[str] = None,
-        birthday: Optional[datetime] = None
+        birthday: Optional[str] = None
     ):
-        self._name = name
-        self._phone = phone
-        self._email = email
-        self._address = address
-        self._birthday = birthday
-    
-    # Name property
-    @property
-    def name(self) -> str:
-        return self._name
-    
-    @name.setter
-    def name(self, value: str):
-        if not value or not value.strip():
-            raise ValueError("Name cannot be empty")
-        self._name = value.strip()
-    
-    # Phone property
-    @property
-    def phone(self) -> Optional[str]:
-        return self._phone
-    
-    @phone.setter
-    def phone(self, value: Optional[str]):
-        self._phone = value.strip() if value else None
-    
-    # Email property
-    @property
-    def email(self) -> Optional[str]:
-        return self._email
-    
-    @email.setter
-    def email(self, value: Optional[str]):
-        self._email = value.strip() if value else None
-    
-    # Address property
-    @property
-    def address(self) -> Optional[str]:
-        return self._address
-    
-    @address.setter
-    def address(self, value: Optional[str]):
-        self._address = value.strip() if value else None
-    
-    # Birthday property
-    @property
-    def birthday(self) -> Optional[datetime]:
-        return self._birthday
-    
-    @birthday.setter
-    def birthday(self, value: Optional[datetime]):
-        self._birthday = value
+        self.name = Name(name)
+        self.phone = Phone(phone)
+        self.email = Email(email)
+        self.address = Address(address)
+        self.birthday = Birthday(birthday)
     
     def __str__(self) -> str:
-        parts = [f"Name: {self.name}"]
-        if self.phone:
-            parts.append(f"Phone: {self.phone}")
-        if self.email:
-            parts.append(f"Email: {self.email}")
-        if self.address:
-            parts.append(f"Address: {self.address}")
-        if self.birthday:
-            parts.append(f"Birthday: {self.birthday.strftime('%d.%m.%Y')}")
+        parts = [f"Name: {self.name.value}"]
+        if self.phone.value:
+            parts.append(f"Phone: {self.phone.value}")
+        if self.email.value:
+            parts.append(f"Email: {self.email.value}")
+        if self.address.value:
+            parts.append(f"Address: {self.address.value}")
+        if self.birthday.value:
+            parts.append(f"Birthday: {self.birthday}")
         return ", ".join(parts)
     
     def __repr__(self) -> str:
-        return f"Contact(name='{self.name}', phone='{self.phone}', email='{self.email}')"
+        return f"Contact(name='{self.name.value}', phone='{self.phone.value}', email='{self.email.value}')"
