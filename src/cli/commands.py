@@ -114,3 +114,15 @@ def show_birthday(args, book: AddressBook):
     #         return f"{Fore.GREEN}Contact {name} have birthday {birth}{Fore.RESET}"
 
 
+@input_error
+def birthdays(book: AddressBook):
+    """Show upcoming birthdays"""
+    print(f'{Fore.RED}Needed to do birthdays function!!!!!!!!!!!{Fore.RESET}')
+    # upcoming_birthdays = book.get_upcoming_birthdays()
+    # if len(upcoming_birthdays) < 1:
+    #     print(f"{Fore.RED}No contacts with birthday in future 7 days.{Fore.RESET}")
+    # else:
+    #     for contact in upcoming_birthdays:
+    #         print(f"{Fore.GREEN}{contact['name']}. Congratulation date: {contact['congratulation_date']}{Fore.RESET}")  
+
+
