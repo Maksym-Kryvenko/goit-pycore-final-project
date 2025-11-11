@@ -1,4 +1,6 @@
-
+from colorama import Fore
+from src.services.storage import load_data, save_data
+from src.cli.parser import parse_input
 
 
 
@@ -15,20 +17,20 @@ def main():
             break
         elif command == "hello":
             print(f"{Fore.BLUE}How can I help you?{Fore.RESET}")
-        elif command == "add":
-            print(add_contact(args, book))
-        elif command == "change":
-            print(change_contact(args, book))
-        elif command == "phone":
-            print(get_phone(args, book))
-        elif command == "all":
-            get_all_contacts(book)
-        elif command == "add-birthday":
-            print(add_birthday(args, book))
-        elif command == "show-birthday":
-             print(show_birthday(args, book))
-        elif command == "birthdays":
-           birthdays(book)
+    #     elif command == "add":
+    #         print(add_contact(args, book))
+    #     elif command == "change":
+    #         print(change_contact(args, book))
+    #     elif command == "phone":
+    #         print(get_phone(args, book))
+    #     elif command == "all":
+    #         get_all_contacts(book)
+    #     elif command == "add-birthday":
+    #         print(add_birthday(args, book))
+    #     elif command == "show-birthday":
+    #          print(show_birthday(args, book))
+    #     elif command == "birthdays":
+    #        birthdays(book)
         else:
             print(f"{Fore.RED}Invalid command.{Fore.RESET}")
 
