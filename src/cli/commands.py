@@ -2,7 +2,37 @@ from colorama import Fore
 from src.models.address_book import AddressBook
 from src.models.contact import Contact
 
-# @input_error
+
+class InputPhoneError(Exception):
+    """Exception for input phone error"""
+    pass
+
+
+class InputBirthdayError(Exception):
+    """Exception for input birthday error"""
+    pass
+
+
+def input_error(func):
+    """Decorator to handle input errors for contact functions."""
+    def inner(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ValueError:
+            return f"{Fore.RED}Give correct command please{Fore.RESET}"
+        except IndexError:
+            return f"{Fore.RED}Enter the argument for the command{Fore.RESET}"
+        except KeyError:
+            return f"{Fore.RED}This contact does not exist{Fore.RESET}"
+        except InputPhoneError:
+            return f"{Fore.RED}Phone number must be 10 digits.{Fore.RESET}"
+        except InputBirthdayError:
+            return f"{Fore.RED}Invalid date format. Use DD.MM.YYYY{Fore.RESET}"
+    return inner
+
+
+
+@input_error
 def add_contact(args, book: AddressBook):
     """Add a new contact to the contacts dictionary."""
     name, phone, *_ = args
