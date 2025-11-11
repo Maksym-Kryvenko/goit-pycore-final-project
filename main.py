@@ -1,7 +1,7 @@
 from colorama import Fore
 from src.services.storage import load_data, save_data
 from src.cli.parser import parse_input
-from src.cli.commands import add_contact, change_contact
+from src.cli.commands import add_contact, change_contact, get_phone
 
 
 def main():
@@ -21,8 +21,8 @@ def main():
             print(add_contact(args, book))
         elif command == "change":
             print(change_contact(args, book))
-    #     elif command == "phone":
-    #         print(get_phone(args, book))
+        elif command == "phone":
+            print(get_phone(args, book))
     #     elif command == "all":
     #         get_all_contacts(book)
     #     elif command == "add-birthday":

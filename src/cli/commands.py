@@ -63,3 +63,16 @@ def change_contact(args, book: AddressBook):
             # record.remove_phone(phone_old)
             # record.add_phone(phone_new)
             # return f"{Fore.GREEN}Phone {phone_old} for contact {name} was updated to {phone_new}.{Fore.RESET}"
+
+
+@input_error
+def get_phone(args, book: AddressBook):
+    """Get phone numbers of a contact."""
+    return f'{Fore.RED}Needed to do get phone function!!!!!!!!!!!{Fore.RESET}'
+    # name, *_ = args
+    # record = book.search_contacts(name)
+    # if record is None:
+    #     raise KeyError
+    # else:
+    #     return f"{Fore.GREEN}{record}{Fore.RESET}"
+
