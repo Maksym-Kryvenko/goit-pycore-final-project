@@ -29,20 +29,20 @@ goit-pycore-final-project/
 │   ├── models/
 │   │   ├── __init__.py
 │   │   ├── fields.py          # Field, Name, Phone, Birthday
-│   │   ├── record.py          # Record class
-│   │   └── address_book.py    # AddressBook class
+│   │   ├── contact.py         # Contact class # TODO (see contact.py)
+│   │   └── address_book.py    # AddressBook class # TODO
 │   ├── services/
 │   │   ├── __init__.py
 │   │   ├── storage.py         # save_data, load_data
-│   │   └── contact_service.py # Business logic for contacts
+│   │   └── contact_service.py # Business logic for contacts # TODO
 │   ├── cli/
 │   │   ├── __init__.py
-│   │   ├── commands.py        # Command functions (add_contact, change_phone, etc.)
-│   │   ├── parser.py          # parse_input function
-│   │   └── interface.py       # main() function and user interaction
+│   │   ├── commands.py        # Command functions (add_contact, change_phone, etc.) # TODO
+│   │   ├── parser.py          # parse_input function # TODO
+│   │   └── interface.py       # main() function and user interaction # TODO
 │   └── utils/
 │       ├── __init__.py
-│       ├── decorators.py      # input_error decorator
+│       ├── decorators.py      # input_error decorator # TODO
 │       └── validators.py      # Validation utilities
 ├── data/                      # For storing .pkl files
 │   └── .gitkeep
