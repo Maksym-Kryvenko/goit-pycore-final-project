@@ -1,6 +1,7 @@
-from typing import List, Optional
+from typing import List
 from collections import UserDict
 from .contact import Contact
+from .field import Name, Phone, Email, Address, Birthday
 
 
 class AddressBook(UserDict):
@@ -22,13 +23,23 @@ class AddressBook(UserDict):
         del self.data[name]
     
     def update_contact(self, name: str, **kwargs) -> None:
-        """Update contact fields."""
+        """Update contact fields with proper Field validation."""
         contact = self.data.get(name)
         if not contact:
             raise ValueError(f"Contact with name '{name}' not found")
         
+        field_map = {
+            'name': Name,
+            'phone': Phone,
+            'email': Email,
+            'address': Address,
+            'birthday': Birthday
+        }
+        
         for key, value in kwargs.items():
-            if hasattr(contact, key):
+            if key in field_map and hasattr(contact, key):
+                setattr(contact, key, field_map[key](value))
+            elif hasattr(contact, key):
                 setattr(contact, key, value)
     
     def search_contacts(self, query: str) -> List[Contact]:
@@ -41,10 +52,6 @@ class AddressBook(UserDict):
                 (contact.email.value and query in contact.email.value.lower())):
                 results.append(contact)
         return results
-    
-    def get_all_contacts(self) -> List[Contact]:
-        """Get all contacts."""
-        return list(self.data.values())
     
     def __str__(self) -> str:
         if not self.data:

@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+import re
 
 
 class Field:
@@ -22,6 +23,12 @@ class Field:
     
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._value})"
+    
+    def __eq__(self, other) -> bool:
+        """Compare fields by value."""
+        if isinstance(other, Field):
+            return self._value == other._value
+        return self._value == other
 
 
 class Name(Field):
@@ -48,8 +55,10 @@ class Phone(Field):
     @value.setter
     def value(self, new_value: Optional[str]):
         if new_value:
-            cleaned = new_value.strip()
-            # Add phone validation if needed
+            # Remove all non-digit characters
+            cleaned = re.sub(r'\D', '', new_value)
+            if len(cleaned) < 10:
+                raise ValueError("Phone must have at least 10 digits")
             self._value = cleaned
         else:
             self._value = None
@@ -66,8 +75,10 @@ class Email(Field):
     def value(self, new_value: Optional[str]):
         if new_value:
             cleaned = new_value.strip()
-            # Add email validation if needed
-            self._value = cleaned
+            # Basic email validation
+            if '@' not in cleaned or '.' not in cleaned.split('@')[-1]:
+                raise ValueError("Invalid email format")
+            self._value = cleaned.lower()
         else:
             self._value = None
 

@@ -33,3 +33,9 @@ class Contact:
     
     def __repr__(self) -> str:
         return f"Contact(name='{self.name.value}', phone='{self.phone.value}', email='{self.email.value}')"
+    
+    def __eq__(self, other) -> bool:
+        """Compare contacts by name."""
+        if not isinstance(other, Contact):
+            return False
+        return self.name.value == other.name.value
