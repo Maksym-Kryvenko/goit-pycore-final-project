@@ -31,7 +31,6 @@ def input_error(func):
     return inner
 
 
-
 @input_error
 def add_contact(args, book: AddressBook):
     """Add a new contact to the contacts dictionary."""
@@ -47,3 +46,20 @@ def add_contact(args, book: AddressBook):
     #     record.add_phone(phone)
     return message
 
+
+@input_error
+def change_contact(args, book: AddressBook):
+    """Change the phone number of an existing contact."""
+    return f'{Fore.RED}Needed to do change the phone number function!!!!!!!!!!!{Fore.RESET}'
+    # name, phone_old, phone_new = args[0], args[1], args[2]
+    # record = book.search_contacts(name)
+    # if record is None:
+    #     raise KeyError
+    # else:
+        # record_phone = record.find_phone(phone_old)
+        # if record_phone is None:
+            # return f"{Fore.RED}Phone {phone_old} for contact {name} not found.{Fore.RESET}"
+        # else:
+            # record.remove_phone(phone_old)
+            # record.add_phone(phone_new)
+            # return f"{Fore.GREEN}Phone {phone_old} for contact {name} was updated to {phone_new}.{Fore.RESET}"

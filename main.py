@@ -1,7 +1,7 @@
 from colorama import Fore
 from src.services.storage import load_data, save_data
 from src.cli.parser import parse_input
-from src.cli.commands import add_contact
+from src.cli.commands import add_contact, change_contact
 
 
 def main():
@@ -19,8 +19,8 @@ def main():
             print(f"{Fore.BLUE}How can I help you?{Fore.RESET}")
         elif command == "add":
             print(add_contact(args, book))
-    #     elif command == "change":
-    #         print(change_contact(args, book))
+        elif command == "change":
+            print(change_contact(args, book))
     #     elif command == "phone":
     #         print(get_phone(args, book))
     #     elif command == "all":
