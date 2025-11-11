@@ -15,17 +15,17 @@ def check_email(email: str) -> bool:
     """
     Validate email
     """
-    pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
     return re.match(pattern, email) is not None
 
 
 def check_phone(phone: str) -> bool:
     """
-    Validate that the phone number consists of exactly 10 digits.
+    Validate that the phone number is valid (Ukrainian format).
     """
     phone_number = phone.strip().replace(" ", "")
     phone_number = phone_number[phone_number.index("0") :]
-    pattern = r'(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})'
+    pattern = r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})"
     return re.fullmatch(pattern, phone_number) is not None
 
 
@@ -45,6 +45,7 @@ def check_date(date_str: str) -> bool:
         return False
     try:
         from datetime import datetime
+
         date_obj = datetime.strptime(date_str, "%d.%m.%Y")
         today = datetime.now()
         if date_obj < today:
@@ -52,4 +53,3 @@ def check_date(date_str: str) -> bool:
         return False
     except ValueError:
         return False
-
