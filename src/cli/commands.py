@@ -85,3 +85,16 @@ def get_all_contacts(book: AddressBook):
     #     print(f"{Fore.GREEN}{record}{Fore.RESET}")
 
 
+@input_error
+def add_birthday(args, book):
+    """Add a birthday to contact."""
+    return f'{Fore.RED}Needed to do add birthday function!!!!!!!!!!!{Fore.RESET}'
+    # name, birth, *_ = args
+    # record = book.find(name)
+    # if record is None:
+    #     raise KeyError  
+    # else:
+    #     record.add_birthday(birth)
+    # return f"{Fore.GREEN}Birthday was added to contact {name}.{Fore.RESET}"
+
+
