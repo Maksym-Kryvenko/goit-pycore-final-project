@@ -126,3 +126,33 @@ class Birthday(Field):
 
     def __str__(self) -> str:
         return self._value.strftime("%d.%m.%Y") if self._value else ""
+
+
+class NoteText(Field):
+    """Note text field."""
+
+    def __init__(self, value: str):
+        super().__init__(value)
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, new_value: str):
+        self._value = new_value.strip() if new_value else None
+
+
+class NoteTag(Field):
+    """Note tag field."""
+
+    def __init__(self, value: str):
+        super().__init__(value)
+
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, new_value: str):
+        self._value = new_value.strip().lower() if new_value else None

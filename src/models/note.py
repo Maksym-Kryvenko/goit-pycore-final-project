@@ -1,5 +1,6 @@
 from datetime import datetime
 import uuid
+from .fields import NoteText, NoteTag
 
 
 class Note:
@@ -9,12 +10,12 @@ class Note:
         self,
         content: str,
         contact_name: str = None,
-        tags: list = None,
+        tags: tuple = None,
     ):
         self.id = str(uuid.uuid4())
-        self.content = content
+        self.content = NoteText(content) if content else NoteText("")
         self.contact_name = contact_name
-        self.tags = tags if tags else []
+        self.tags = [NoteTag(tag) for tag in tags] if tags else []
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
 
@@ -33,6 +34,7 @@ class Note:
             self.tags.remove(tag_clean)
             self.updated_at = datetime.now()
 
+    # TODO: Implement relationship with Contact objects.
     def link_to_contact(self, contact_name: str) -> None:
         """Link note to a contact."""
         self.contact_name = contact_name
