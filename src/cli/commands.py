@@ -5,16 +5,19 @@ from src.models.contact import Contact
 
 class InputPhoneError(Exception):
     """Exception for input phone error"""
+
     pass
 
 
 class InputBirthdayError(Exception):
     """Exception for input birthday error"""
+
     pass
 
 
 def input_error(func):
     """Decorator to handle input errors for contact functions."""
+
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -28,6 +31,7 @@ def input_error(func):
             return f"{Fore.RED}Phone number must be 10 digits.{Fore.RESET}"
         except InputBirthdayError:
             return f"{Fore.RED}Invalid date format. Use DD.MM.YYYY{Fore.RESET}"
+
     return inner
 
 
@@ -52,35 +56,41 @@ def change_contact(args, book: AddressBook):
     """Change the phone number of an existing contact."""
     name, phone_old, phone_new = args[0], args[1], args[2]
     record = book.find(name)
-    if record is not None:
-        record.add_phone(phone_new)
-        return f"{Fore.GREEN}Phone {phone_old} for contact {name.capitalize()} was updated to {phone_new}.{Fore.RESET}"
-    # if record is None:
-    #     raise KeyError
-    # else:
-    #     record_phone = record.find_phone(phone_old)
-    #     if record_phone is None:
-    #         return f"{Fore.RED}Phone {phone_old} for contact {name} not found.{Fore.RESET}"
-    #     else:
-    #         record.remove_phone(phone_old)
-    #         record.add_phone(phone_new)
-    #         return f"{Fore.GREEN}Phone {phone_old} for contact {name} was updated to {phone_new}.{Fore.RESET}"
+    if record is None:
+        raise KeyError
+
+    record_phone = record.find_phone(phone_old)
+    if record_phone is None:
+        return f"{Fore.RED}Phone {phone_old} for contact {name} not found.{Fore.RESET}"
+
+    record.remove_phone(phone_old)
+    record.add_phone(phone_new)
+    return f"{Fore.GREEN}Phone {phone_old} for contact {name.capitalize()} was updated to {phone_new}.{Fore.RESET}"
 
 
 @input_error
 def get_phone(args, book: AddressBook):
     """Get phone numbers of a contact."""
     name, *_ = args
-    record = book.search_contacts(name)
-    if record is None:
+    contacts = book.search_contacts(name)
+    if contacts is None:
         raise KeyError
-    else:
-        return f"{Fore.GREEN}{record}{Fore.RESET}"
+
+    # Join all contacts into a string
+    result = []
+    for contact in contacts:
+        if contact.phones:
+            phones_str = ", ".join([phone.value for phone in contact.phones])
+            result.append(f"{contact.name.value}: {phones_str}")
+        else:
+            result.append(f"{contact.name.value}: No phones")
+
+    return f"{Fore.GREEN}{'; '.join(result)}{Fore.RESET}"
 
 
-@input_error    
+@input_error
 def get_all_contacts(book: AddressBook):
-    """ Return all contacts"""
+    """Return all contacts"""
     for record in book.data.values():
         print(f"{Fore.GREEN}{record}{Fore.RESET}")
 
@@ -91,7 +101,7 @@ def add_birthday(args, book):
     name, birth, *_ = args
     record = book.find(name)
     if record is None:
-        raise KeyError  
+        raise KeyError
     else:
         record.add_birthday(birth)
     return f"{Fore.GREEN}Birthday was added to contact {name}.{Fore.RESET}"
@@ -107,7 +117,9 @@ def show_birthday(args, book: AddressBook):
     else:
         birth = record.birthday
         if birth is None:
-            return f"{Fore.RED}No information on birthday of contact {name}.{Fore.RESET}"
+            return (
+                f"{Fore.RED}No information on birthday of contact {name}.{Fore.RESET}"
+            )
         else:
             return f"{Fore.GREEN}Contact {name} have birthday {birth}{Fore.RESET}"
 
@@ -120,6 +132,6 @@ def birthdays(book: AddressBook):
         print(f"{Fore.RED}No contacts with birthday in future 7 days.{Fore.RESET}")
     else:
         for contact in upcoming_birthdays:
-            print(f"{Fore.GREEN}{contact['name']}. Congratulation date: {contact['congratulation_date']}{Fore.RESET}")  
-
-
+            print(
+                f"{Fore.GREEN}{contact['name']}. Congratulation date: {contact['congratulation_date']}{Fore.RESET}"
+            )
