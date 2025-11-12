@@ -37,7 +37,11 @@ class Contact:
         self.address = Address(address)
 
     def remove_phone(self, phone_number):
-        self.phones = [phone for phone in self.phones if phone.value != phone_number]
+        try:
+            normalized = Phone(phone_number)
+            self.phones = [phone for phone in self.phones if phone.value != normalized.value]
+        except ValueError:
+            pass  # Invalid phone format, nothing to remove
 
     def remove_email(self, email_address):
         try:
