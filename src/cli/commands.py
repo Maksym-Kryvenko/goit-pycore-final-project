@@ -100,17 +100,16 @@ def add_birthday(args, book):
 @input_error
 def show_birthday(args, book: AddressBook):
     """Show contact birthday"""
-    return f'{Fore.RED}Needed to do show birthday function!!!!!!!!!!!{Fore.RESET}'
-    # name, *_ = args
-    # record = book.search_contacts(name)
-    # if record is None:
-    #     return f"{Fore.RED}Contact {name} not found.{Fore.RESET}"
-    # else:
-    #     birth = record.birthday
-    #     if birth is None:
-    #         return f"{Fore.RED}No information on birthday of contact {name}.{Fore.RESET}"
-    #     else:
-    #         return f"{Fore.GREEN}Contact {name} have birthday {birth}{Fore.RESET}"
+    name, *_ = args
+    record = book.find(name)
+    if record is None:
+        return f"{Fore.RED}Contact {name} not found.{Fore.RESET}"
+    else:
+        birth = record.birthday
+        if birth is None:
+            return f"{Fore.RED}No information on birthday of contact {name}.{Fore.RESET}"
+        else:
+            return f"{Fore.GREEN}Contact {name} have birthday {birth}{Fore.RESET}"
 
 
 @input_error
