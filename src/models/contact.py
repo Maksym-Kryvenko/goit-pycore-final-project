@@ -43,3 +43,6 @@ class Contact:
     
     def add_phone(self, phone_number):
         self.phone = Phone(phone_number)
+
+    def add_birthday(self, value: str):
+        self.birthday = Birthday(value)
