@@ -34,32 +34,38 @@ def input_error(func):
 @input_error
 def add_contact(args, book: AddressBook):
     """Add a new contact to the contacts dictionary."""
-    name, phone, *_ = args
-    record = book.search_contacts(name)
+    name, *rest = args
+    phone = rest[0] if rest else None
+    record = book.find(name)
     message = f"{Fore.GREEN}Contact updated.{Fore.RESET}"
-    if record == []:
-        record = Contact(name, phone)
+    if record is None:
+        record = Contact(name)
         book.add_contact(record)
         message = f"{Fore.GREEN}Contact added.{Fore.RESET}"
+    if phone:
+        record.add_phone(phone)
     return message
 
 
 @input_error
 def change_contact(args, book: AddressBook):
     """Change the phone number of an existing contact."""
-    return f'{Fore.RED}Needed to do change the phone number function!!!!!!!!!!!{Fore.RESET}'
-    # name, phone_old, phone_new = args[0], args[1], args[2]
-    # record = book.search_contacts(name)
+    # return f'{Fore.RED}Needed to do change the phone number function!!!!!!!!!!!{Fore.RESET}'
+    name, phone_old, phone_new = args[0], args[1], args[2]
+    record = book.find(name)
+    if record is not None:
+        record.add_phone(phone_new)
+        return f"{Fore.GREEN}Phone {phone_old} for contact {name.capitalize()} was updated to {phone_new}.{Fore.RESET}"
     # if record is None:
     #     raise KeyError
     # else:
-        # record_phone = record.find_phone(phone_old)
-        # if record_phone is None:
-            # return f"{Fore.RED}Phone {phone_old} for contact {name} not found.{Fore.RESET}"
-        # else:
-            # record.remove_phone(phone_old)
-            # record.add_phone(phone_new)
-            # return f"{Fore.GREEN}Phone {phone_old} for contact {name} was updated to {phone_new}.{Fore.RESET}"
+    #     record_phone = record.find_phone(phone_old)
+    #     if record_phone is None:
+    #         return f"{Fore.RED}Phone {phone_old} for contact {name} not found.{Fore.RESET}"
+    #     else:
+    #         record.remove_phone(phone_old)
+    #         record.add_phone(phone_new)
+    #         return f"{Fore.GREEN}Phone {phone_old} for contact {name} was updated to {phone_new}.{Fore.RESET}"
 
 
 @input_error
