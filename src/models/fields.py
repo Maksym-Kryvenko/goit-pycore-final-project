@@ -112,7 +112,7 @@ class Address(Field):
         if new_value is None:
             self._value = None
         else:
-            self._value = new_value.strip() if new_value else None
+            self._value = new_value.strip() if new_value.strip() else None
 
 
 class Birthday(Field):
