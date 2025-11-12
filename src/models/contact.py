@@ -40,7 +40,11 @@ class Contact:
         self.phones = [phone for phone in self.phones if phone.value != phone_number]
 
     def remove_email(self, email_address):
-        self.emails = [email for email in self.emails if email.value != email_address]
+        try:
+            normalized_email = Email(email_address)
+            self.emails = [email for email in self.emails if email.value != normalized_email.value]
+        except ValueError:
+            pass  # Invalid email format, nothing to remove
 
     def find_phone(self, phone_number):
         """Find a phone number in the contact."""
