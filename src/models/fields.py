@@ -52,9 +52,10 @@ class Phone(Field):
 
     @value.setter
     def value(self, new_value: str):
-        if not check_phone(new_value):
-            raise ValueError("Phone must be +380XX-XXX-XX-XX format")
-        self._value = self.__normalize_phone(new_value)
+        if new_value is not None:
+            if not check_phone(new_value):
+                raise ValueError("Phone must be +380XX-XXX-XX-XX format")
+            self._value = self.__normalize_phone(new_value)
 
     def __normalize_phone(phone_number: str) -> str:
         """
@@ -86,9 +87,10 @@ class Email(Field):
 
     @value.setter
     def value(self, new_value: str):
-        if not check_email(new_value):
-            raise ValueError("Invalid email format")
-        self._value = new_value.strip().lower()
+        if new_value is not None:
+            if not check_email(new_value):
+                raise ValueError("Invalid email format")
+            self._value = new_value.strip().lower()
 
 
 class Address(Field):
@@ -118,11 +120,12 @@ class Birthday(Field):
 
     @value.setter
     def value(self, new_value: str):
-        if not check_date(new_value):
-            raise ValueError(
-                "Birthday must be in format DD.MM.YYYY and cannot be today or in the future"
-            )
-        self._value = datetime.strptime(new_value, "%d.%m.%Y")
+        if new_value is not None:
+            if not check_date(new_value):
+                raise ValueError(
+                    "Birthday must be in format DD.MM.YYYY and cannot be today or in the future"
+                )
+            self._value = datetime.strptime(new_value, "%d.%m.%Y")
 
     def __str__(self) -> str:
         return self._value.strftime("%d.%m.%Y") if self._value else ""

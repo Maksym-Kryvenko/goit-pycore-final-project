@@ -40,3 +40,6 @@ class Contact:
         if not isinstance(other, Contact):
             return False
         return self.name.value == other.name.value
+    
+    def add_phone(self, phone_number):
+        self.phone = Phone(phone_number)
