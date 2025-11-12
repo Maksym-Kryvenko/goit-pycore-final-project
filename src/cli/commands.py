@@ -50,7 +50,6 @@ def add_contact(args, book: AddressBook):
 @input_error
 def change_contact(args, book: AddressBook):
     """Change the phone number of an existing contact."""
-    # return f'{Fore.RED}Needed to do change the phone number function!!!!!!!!!!!{Fore.RESET}'
     name, phone_old, phone_new = args[0], args[1], args[2]
     record = book.find(name)
     if record is not None:
@@ -71,13 +70,12 @@ def change_contact(args, book: AddressBook):
 @input_error
 def get_phone(args, book: AddressBook):
     """Get phone numbers of a contact."""
-    return f'{Fore.RED}Needed to do get phone function!!!!!!!!!!!{Fore.RESET}'
-    # name, *_ = args
-    # record = book.search_contacts(name)
-    # if record is None:
-    #     raise KeyError
-    # else:
-    #     return f"{Fore.GREEN}{record}{Fore.RESET}"
+    name, *_ = args
+    record = book.search_contacts(name)
+    if record is None:
+        raise KeyError
+    else:
+        return f"{Fore.GREEN}{record}{Fore.RESET}"
 
 
 @input_error    
