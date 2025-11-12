@@ -57,7 +57,7 @@ class Phone(Field):
                 raise ValueError("Phone must be +380XX-XXX-XX-XX format")
             self._value = self.__normalize_phone(new_value)
 
-    def __normalize_phone(phone_number: str) -> str:
+    def __normalize_phone(self, phone_number: str) -> str:
         """
         Normalize a phone number to the format +380XXXXXXXXX.
         :param phone_number: str The input phone number in various formats.

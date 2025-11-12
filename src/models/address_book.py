@@ -64,6 +64,14 @@ class AddressBook(UserDict):
 
     def __repr__(self) -> str:
         return f"AddressBook(contacts={len(self.data)})"
+    
+
+    def find(self, name):
+        if name in self.data:
+            return self.data[name]
+        else:
+            return None
+
 
     # def get_upcoming_birthdays(self):
     #     """Get a list of users with birthdays in the next 7 days."""
