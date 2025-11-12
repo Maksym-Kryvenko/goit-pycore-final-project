@@ -28,6 +28,8 @@ htmlcov/
 
 # UV package manager
 uv.lock
+.python-version
+pyproject.toml
 
 # IDE
 .vscode/
@@ -39,3 +41,7 @@ uv.lock
 # Project specific
 data/*.pkl
 data/*.json
+BACKLOG.md
+
+# pre-commit
+.pre-commit-config.yaml
