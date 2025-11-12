@@ -121,7 +121,7 @@ def show_birthday(args, book: AddressBook):
                 f"{Fore.RED}No information on birthday of contact {name}.{Fore.RESET}"
             )
         else:
-            return f"{Fore.GREEN}Contact {name} have birthday {birth}{Fore.RESET}"
+            return f"{Fore.GREEN}Contact {name} has birthday {birth}{Fore.RESET}"
 
 
 @input_error
