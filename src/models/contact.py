@@ -69,6 +69,7 @@ class Contact:
                 if email.value == normalized_email.value:
                     return email
         except ValueError:
+            # If the email address is invalid, return None to indicate not found
             pass
         return None
 
