@@ -65,7 +65,7 @@ class AddressBook(UserDict):
                         results.append(contact)
                         break
 
-        return results if results else None
+        return results
 
     def find(self, name):
         if name in self.data:
