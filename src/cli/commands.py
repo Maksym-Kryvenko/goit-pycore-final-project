@@ -81,9 +81,8 @@ def get_phone(args, book: AddressBook):
 @input_error    
 def get_all_contacts(book: AddressBook):
     """ Return all contacts"""
-    print(f'{Fore.RED}Needed to do get all contact function!!!!!!!!!!!{Fore.RESET}')
-    # for record in book.data.values():
-    #     print(f"{Fore.GREEN}{record}{Fore.RESET}")
+    for record in book.data.values():
+        print(f"{Fore.GREEN}{record}{Fore.RESET}")
 
 
 @input_error
