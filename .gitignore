@@ -1,1 +1,41 @@
-.venv/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environments
+.env
+.venv
+venv/
+ENV/
+
+# # Logs
+# *.log
+# logs/
+
+# Unit test / coverage reports
+.coverage
+.pytest_cache/
+htmlcov/
+
+# UV package manager
+uv.lock
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Project specific
+data/*.pkl
+data/*.json
