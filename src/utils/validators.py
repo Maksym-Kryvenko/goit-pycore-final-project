@@ -47,8 +47,8 @@ def check_date(date_str: str) -> bool:
         try:
             from datetime import datetime
 
-            date_obj = datetime.strptime(date_str, "%d.%m.%Y")
-            today = datetime.now()
+            date_obj = datetime.strptime(date_str, "%d.%m.%Y").date()
+            today = datetime.now().date()
             if date_obj < today:
                 return True
             return False
