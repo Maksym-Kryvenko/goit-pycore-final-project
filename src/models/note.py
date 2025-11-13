@@ -34,7 +34,6 @@ class Note:
             self.tags.remove(tag_obj)
             self.updated_at = datetime.now()
 
-    # TODO: Implement relationship with Contact objects.
     def link_to_contact(self, contact_name: str) -> None:
         """Link note to a contact."""
         self.contact_name = contact_name

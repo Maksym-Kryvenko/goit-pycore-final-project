@@ -15,6 +15,47 @@ TBD
 ## Usage
 TBD
 
+### Working with Notes
+
+#### Quick Start
+```python
+from src.services import NoteAPI
+
+# Initialize API
+api = NoteAPI()
+
+# Add note
+note = api.add_note("Meeting notes", tags=("work", "important"))
+
+# Add tags
+api.add_tags_to_note(note.id, "project", "todo")
+
+# Link to contact
+api.link_note_to_contact(note.id, "John Doe")
+
+# Search
+work_notes = api.search_by_tags("work")
+john_notes = api.search_by_contact("John Doe")
+
+# Sort
+recent = api.sort_by_updated_date(reverse=True)
+```
+
+#### Available Note Operations
+- `add_note(content, contact_name=None, tags=None)` - Add new note
+- `delete_note(note_id)` - Delete note
+- `find_note(note_id)` - Find note by ID
+- `add_tags_to_note(note_id, *tags)` - Add tags
+- `remove_tag_from_note(note_id, tag)` - Remove tag
+- `link_note_to_contact(note_id, contact_name)` - Link to contact
+- `unlink_note_from_contact(note_id)` - Unlink from contact
+- `search_by_tags(*tags)` - Search by tags
+- `search_by_contact(contact_name)` - Search by contact
+- `get_all_notes()` - Get all notes
+- `get_all_tags()` - Get all unique tags
+- `sort_by_created_date(reverse=False)` - Sort by creation date
+- `sort_by_updated_date(reverse=False)` - Sort by update date
+
 ### Available Commands
 TBD
 
