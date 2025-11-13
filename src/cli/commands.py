@@ -135,3 +135,16 @@ def birthdays(book: AddressBook):
             print(
                 f"{Fore.GREEN}{contact['name']}. Congratulation date: {contact['congratulation_date']}{Fore.RESET}"
             )
+
+
+@input_error
+def del_contact(args, book: AddressBook):
+    """Del the contact from the contacts dictionary."""
+    name, *_ = args
+    record = book.find(name)
+    if record:
+        book.remove_contact(name)
+        message = f"{Fore.GREEN}Contact {name.capitalize()} was deleted.{Fore.RESET}"
+    else:
+        message = f"{Fore.GREEN}Contact {name.capitalize()} not founded.{Fore.RESET}"
+    return message

@@ -1,7 +1,8 @@
 from colorama import Fore
 from src.services.storage import load_data, save_data
 from src.cli.parser import parse_input
-from src.cli.commands import add_contact, change_contact, get_phone, get_all_contacts, add_birthday, show_birthday, birthdays
+from src.cli.commands import add_contact, change_contact, get_phone, get_all_contacts, add_birthday, show_birthday, birthdays, del_contact
+from src.utils.commands_list import print_help
 
 
 def main():
@@ -17,6 +18,8 @@ def main():
             break
         elif command == "hello":
             print(f"{Fore.BLUE}How can I help you?{Fore.RESET}")
+        elif command in ["?", "help"]:
+            print_help()
         elif command == "add":
             print(add_contact(args, book))
         elif command == "change":
@@ -31,6 +34,8 @@ def main():
              print(show_birthday(args, book))
         elif command == "birthdays":
            birthdays(book)
+        elif command == "del":
+            print(del_contact(args, book))
         else:
             print(f"{Fore.RED}Invalid command.{Fore.RESET}")
 
