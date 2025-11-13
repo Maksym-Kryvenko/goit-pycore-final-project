@@ -1,3 +1,3 @@
-from .note_api import NoteAPI
+from .note_assistant import NoteAssistant
 
-__all__ = ["NoteAPI"]
+__all__ = ["NoteAssistant"]

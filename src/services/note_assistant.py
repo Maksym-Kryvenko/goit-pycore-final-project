@@ -1,10 +1,10 @@
-"""API for Note and NoteBook operations."""
+"""Assistant for Note and NoteBook operations."""
 from typing import Optional
 from ..models import Note, NoteBook
 
 
-class NoteAPI:
-    """API layer for Note and NoteBook management."""
+class NoteAssistant:
+    """Assistant layer for Note and NoteBook management."""
 
     def __init__(self):
         self.notebook = NoteBook()

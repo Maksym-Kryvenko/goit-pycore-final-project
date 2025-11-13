@@ -19,26 +19,26 @@ TBD
 
 #### Quick Start
 ```python
-from src.services import NoteAPI
+from src.services import NoteAssistant
 
 # Initialize API
-api = NoteAPI()
+note = NoteAssistant()
 
 # Add note
-note = api.add_note("Meeting notes", tags=("work", "important"))
+note = note.add_note("Meeting notes", tags=("work", "important"))
 
 # Add tags
-api.add_tags_to_note(note.id, "project", "todo")
+note.add_tags_to_note(note.id, "project", "todo")
 
 # Link to contact
-api.link_note_to_contact(note.id, "John Doe")
+note.link_note_to_contact(note.id, "John Doe")
 
 # Search
-work_notes = api.search_by_tags("work")
-john_notes = api.search_by_contact("John Doe")
+work_notes = note.search_by_tags("work")
+john_notes = note.search_by_contact("John Doe")
 
 # Sort
-recent = api.sort_by_updated_date(reverse=True)
+recent = note.sort_by_updated_date(reverse=True)
 ```
 
 #### Available Note Operations
