@@ -1,4 +1,4 @@
-from .commands import add_contact, change_contact, get_phone, get_all_contacts, add_birthday, show_birthday, birthdays, del_contact, add_address
+from .commands import add_contact, change_contact, get_phone, get_all_contacts, add_birthday, show_birthday, birthdays, del_contact, add_address, rename_contact
 
 __all__ = [
     "add_contact",
@@ -10,4 +10,5 @@ __all__ = [
     "birthdays",
     "del_contact",
     "add_address",
+    "rename_contact",
 ]

@@ -22,8 +22,10 @@ def main():
             print_help()
         elif command == "add":
             print(add_contact(args, book))
-        elif command == "change_phone":
+        elif command == "change":
             print(change_contact(args, book))
+        elif command == "rename":
+            print(rename_contact(args, book))
         elif command == "phone":
             print(get_phone(args, book))
         elif command == "all":
@@ -44,3 +46,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

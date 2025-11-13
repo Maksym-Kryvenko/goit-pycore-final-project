@@ -1,6 +1,7 @@
 from colorama import Fore
 from src.models.address_book import AddressBook
 from src.models.contact import Contact
+from src.models.fields import Name
 
 
 class InputPhoneError(Exception):
@@ -56,19 +57,42 @@ def add_contact(args, book: AddressBook):
 
 @input_error
 def change_contact(args, book: AddressBook):
-    """Change the phone number of an existing contact."""
-    name, phone_old, phone_new = args[0], args[1], args[2]
+    """Change the phone number or email of an existing contact."""
+    name, value_old, value_new = args[0], args[1], args[2]
     record = book.find(name)
     if record is None:
         raise KeyError
 
-    record_phone = record.find_phone(phone_old)
-    if record_phone is None:
-        return f"{Fore.RED}Phone {phone_old} for contact {name} not found.{Fore.RESET}"
+    if "@" in value_old:
+        record_email = record.find_email(value_old)
+        if record_email is None:
+            return f"{Fore.RED}Email {value_old} for contact {name} not found.{Fore.RESET}"
+        record.remove_email(value_old)
+        record.add_email(value_new)
+        return f"{Fore.GREEN}Email {value_old} for contact {name.capitalize()} was updated to {value_new}.{Fore.RESET}"          
+    else:
+        record_phone = record.find_phone(value_old)
+        if record_phone is None:
+            return f"{Fore.RED}Phone {value_old} for contact {name} not found.{Fore.RESET}"
+        record.remove_phone(value_old)
+        record.add_phone(value_new)
+        return f"{Fore.GREEN}Phone {value_old} for contact {name.capitalize()} was updated to {value_new}.{Fore.RESET}"
 
-    record.remove_phone(phone_old)
-    record.add_phone(phone_new)
-    return f"{Fore.GREEN}Phone {phone_old} for contact {name.capitalize()} was updated to {phone_new}.{Fore.RESET}"
+
+@input_error
+def rename_contact(args, book: AddressBook):
+    """Rename existing contact."""
+    old_name, new_name = args[0], args[1]
+    record = book.find(old_name)
+    if record is None:
+        raise KeyError
+    if book.find(new_name):
+        return f"{Fore.RED}Contact with name {new_name} already exists.{Fore.RESET}"
+    # remove old record, update name, and add it with new name
+    book.remove_contact(old_name)
+    record.name.value = new_name
+    book.add_contact(record)
+    return f"{Fore.GREEN}Contact {old_name.lower().capitalize()} was renamed to {new_name.lower().capitalize()}.{Fore.RESET}"
 
 
 @input_error
