@@ -22,7 +22,7 @@ def main():
             print_help()
         elif command == "add":
             print(add_contact(args, book))
-        elif command == "change":
+        elif command == "change_phone":
             print(change_contact(args, book))
         elif command == "phone":
             print(get_phone(args, book))

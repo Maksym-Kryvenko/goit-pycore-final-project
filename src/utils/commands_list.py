@@ -46,5 +46,3 @@ def print_help():
     
     console.print("\nWelcome to yuor Personal Assistant!\n", style="green")
     console.print(table)
-
-print_help()

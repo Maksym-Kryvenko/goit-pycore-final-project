@@ -37,17 +37,20 @@ def input_error(func):
 
 @input_error
 def add_contact(args, book: AddressBook):
-    """Add a new contact to the contacts dictionary."""
+    """Add a new contact to the contacts dictionary or add phone and emeil to existing contact"""
     name, *rest = args
-    phone = rest[0] if rest else None
+    phone_or_email = rest[0] if rest else None
     record = book.find(name)
     message = f"{Fore.GREEN}Contact updated.{Fore.RESET}"
     if record is None:
         record = Contact(name)
         book.add_contact(record)
         message = f"{Fore.GREEN}Contact added.{Fore.RESET}"
-    if phone:
-        record.add_phone(phone)
+    if phone_or_email:
+        if "@" in phone_or_email:
+            record.add_email(phone_or_email)
+        else:
+            record.add_phone(phone_or_email)
     return message
 
 
