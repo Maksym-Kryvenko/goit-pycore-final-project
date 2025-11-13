@@ -21,24 +21,24 @@ TBD
 ```python
 from src.services import NoteAssistant
 
-# Initialize API
-note = NoteAssistant()
+# Initialize Assistant
+assistant = NoteAssistant()
 
 # Add note
-note = note.add_note("Meeting notes", tags=("work", "important"))
+my_note = assistant.add_note("Meeting notes", tags=("work", "important"))
 
 # Add tags
-note.add_tags_to_note(note.id, "project", "todo")
+assistant.add_tags_to_note(my_note.id, "project", "todo")
 
 # Link to contact
-note.link_note_to_contact(note.id, "John Doe")
+assistant.link_note_to_contact(my_note.id, "John Doe")
 
 # Search
-work_notes = note.search_by_tags("work")
-john_notes = note.search_by_contact("John Doe")
+work_notes = assistant.search_by_tags("work")
+john_notes = assistant.search_by_contact("John Doe")
 
 # Sort
-recent = note.sort_by_updated_date(reverse=True)
+recent = assistant.sort_by_updated_date(reverse=True)
 ```
 
 #### Available Note Operations
