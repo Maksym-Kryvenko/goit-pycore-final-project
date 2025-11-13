@@ -151,3 +151,17 @@ def del_contact(args, book: AddressBook):
     else:
         message = f"{Fore.GREEN}Contact {name.capitalize()} not founded.{Fore.RESET}"
     return message
+
+
+@input_error
+def add_address(args, book):
+    """Add or change contact's address"""
+    name, *address = args
+    address = " ".join([adr for adr in address])
+    record = book.find(name)
+    if record is None:
+        raise KeyError
+    else:
+        record.add_address(address)
+    return f"{Fore.GREEN}Address was added to contact {name}.{Fore.RESET}"
+
