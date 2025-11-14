@@ -24,10 +24,11 @@ class NoteBook(UserDict):
 
     def search_by_tags(self, *tags: str) -> list:
         """Search notes by one or multiple tags."""
-        tags_clean = [tag.strip().lower() for tag in tags]
+        from .fields import NoteTag
+        tags_objs = [NoteTag(tag) for tag in tags]
         results = []
         for note in self.data.values():
-            if any(tag in note.tags for tag in tags_clean):
+            if any(tag_obj in note.tags for tag_obj in tags_objs):
                 results.append(note)
         return results
 
@@ -35,7 +36,7 @@ class NoteBook(UserDict):
         """Search notes by contact name."""
         results = []
         for note in self.data.values():
-            if note.contact_name and contact_name.lower() in note.contact_name.lower():
+            if note.contact and contact_name.lower() in note.contact.name.value.lower():
                 results.append(note)
         return results
 
@@ -43,7 +44,7 @@ class NoteBook(UserDict):
         """Get all unique tags from all notes."""
         all_tags = set()
         for note in self.data.values():
-            all_tags.update(note.tags)
+            all_tags.update(tag.value for tag in note.tags)
         return sorted(list(all_tags))
 
     def sort_by_created_date(self, reverse: bool = False) -> list:
