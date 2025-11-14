@@ -1,11 +1,12 @@
-from src.models import AddressBook
+from src.models import AddressBook, NoteBook
 from src.models.contact import Contact
 from src.services.storage import save_data
 
 
 class Assistent:
-    def __init__(self, address_book: AddressBook):
+    def __init__(self, address_book: AddressBook, note_book: NoteBook=None):
         self.address_book = address_book
+        self.note_book = note_book  # Placeholder for future note book implementation
 
 
     def add_contact(self, name: str, phone: str = None) -> tuple[str, Contact]:
@@ -69,5 +70,5 @@ class Assistent:
 
 
     def save_data(self):
-        save_data(self.address_book)
+        save_data(self.address_book, self.note_book)
         return True
