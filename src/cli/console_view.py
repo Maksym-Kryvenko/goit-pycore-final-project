@@ -50,7 +50,9 @@ Commands:
             if data.get("action") == "created":
                 self._show(f"New {data.get('record')} was successful created")
             elif data.get("action") == "updated":
-                self._show(f"New {data.get('record')} was successful updated")
+                self._show(
+                    f"{data.get('contact', data.get('record'))} was successful updated"
+                )
 
     def render_change(self, success: bool, data: dict) -> None:
         if not success:
@@ -59,7 +61,9 @@ Commands:
             else:
                 self._show_error("Something went wrong")
         else:
-            self._show(f"New {data.get('record')} was successful updated")
+            self._show(
+                f"{data.get('contact', data.get('record'))} was successful updated"
+            )
 
     def render_show_phone(self, success: bool, data: dict) -> None:
         if not success:
@@ -99,7 +103,6 @@ Commands:
         else:
             self._show(f"Birthday: {data.get('birthday')}")
 
-
     def render_birthdays(self, success: bool, data: dict) -> None:
         if not success:
             if data.get("error"):
@@ -108,6 +111,36 @@ Commands:
                 self._show_error("Something went wrong")
         else:
             self._show(f"Birthdays: {data.get('birthdays')}")
+
+    def render_add_note(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_edit_note(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_delete_note(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_search_notes(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_list_notes(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_add_tag(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_remove_tag(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_list_tags(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_link(self, success: bool, data: dict) -> None:
+        pass
+
+    def render_unlink(self, success: bool, data: dict) -> None:
+        pass
 
     def render_exit(self, success: bool, data: dict) -> None:
         if not success:

@@ -1,19 +1,19 @@
 """Assistant for Note and NoteBook operations."""
 from typing import Optional
-from ..models import Note, NoteBook, Contact
+from src.models import Note, NoteBook, Contact, AddressBook
+from src.services.storage import save_pkl_book
+from src.config import DEFAULT_NOTEBOOK_FILENAME
 
 
 class NoteAssistant:
     """Assistant layer for Note and NoteBook management."""
 
-    def __init__(self):
-        self.notebook = NoteBook()
+    def __init__(self, notebook: NoteBook, address_book: AddressBook):
+        self.notebook = notebook
+        self.__address_book = address_book
 
     def add_note(
-        self,
-        content: str,
-        contact: Optional[Contact] = None,
-        tags: Optional[tuple] = None
+        self, content: str, contact: str = None, tags: Optional[tuple] = None
     ) -> Note:
         """Add a new note."""
         note = Note(content=content, contact=contact, tags=tags)
@@ -48,11 +48,11 @@ class NoteAssistant:
             return True
         return False
 
-    def link_note_to_contact(self, note_id: str, contact: Contact) -> bool:
+    def link_note_to_contact(self, note_id: str, contact: str) -> bool:
         """Link a note to a contact."""
         note = self.find_note(note_id)
         if note:
-            note.link_to_contact(contact)
+            note.link_to_contact(contact, self.__address_book)
             return True
         return False
 
@@ -87,3 +87,7 @@ class NoteAssistant:
     def sort_by_updated_date(self, reverse: bool = False) -> list:
         """Sort notes by update date."""
         return self.notebook.sort_by_updated_date(reverse=reverse)
+
+    def save_data(self):
+        save_pkl_book(self.notebook, DEFAULT_NOTEBOOK_FILENAME)
+        return True

@@ -1,7 +1,8 @@
 from datetime import datetime
 import uuid
 from typing import Optional
-from .fields import NoteText, NoteTag
+from src.models.fields import NoteText, NoteTag
+from src.models.address_book import AddressBook
 
 
 class Note:
@@ -10,7 +11,7 @@ class Note:
     def __init__(
         self,
         content: str,
-        contact: Optional['Contact'] = None,
+        contact: str = None,
         tags: tuple = None,
     ):
         self.id = str(uuid.uuid4())
@@ -35,9 +36,13 @@ class Note:
             self.tags.remove(tag_obj)
             self.updated_at = datetime.now()
 
-    def link_to_contact(self, contact: 'Contact') -> None:
+    def link_to_contact(self, contact: str, address_book: AddressBook) -> None:
         """Link note to a contact."""
-        self.contact = contact
+        _contact = address_book.find(contact)
+        if _contact:
+            self.contact = _contact
+        else:
+            raise ValueError("Contact not found")
         self.updated_at = datetime.now()
 
     def unlink_contact(self) -> None:
@@ -47,12 +52,22 @@ class Note:
 
     def __str__(self) -> str:
         contact_str = f" [{self.contact.name.value}]" if self.contact else ""
-        tags_str = f" #{' #'.join(str(tag.value) for tag in self.tags)}" if self.tags else ""
-        content_str = str(self.content.value)[:50] if hasattr(self.content, 'value') else str(self.content)[:50]
+        tags_str = (
+            f" #{' #'.join(str(tag.value) for tag in self.tags)}" if self.tags else ""
+        )
+        content_str = (
+            str(self.content.value)[:50]
+            if hasattr(self.content, "value")
+            else str(self.content)[:50]
+        )
         return f"Note{contact_str}: {content_str}...{tags_str}"
 
     def __repr__(self) -> str:
-        content_str = str(self.content.value)[:30] if hasattr(self.content, 'value') else str(self.content)[:30]
+        content_str = (
+            str(self.content.value)[:30]
+            if hasattr(self.content, "value")
+            else str(self.content)[:30]
+        )
         return f"Note(id='{self.id[:8]}...', content='{content_str}...')"
 
     def __eq__(self, other) -> bool:
