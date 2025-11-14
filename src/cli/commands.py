@@ -66,14 +66,18 @@ def change_contact(args, book: AddressBook):
     if "@" in value_old:
         record_email = record.find_email(value_old)
         if record_email is None:
-            return f"{Fore.RED}Email {value_old} for contact {name} not found.{Fore.RESET}"
+            return (
+                f"{Fore.RED}Email {value_old} for contact {name} not found.{Fore.RESET}"
+            )
         record.remove_email(value_old)
         record.add_email(value_new)
-        return f"{Fore.GREEN}Email {value_old} for contact {name.capitalize()} was updated to {value_new}.{Fore.RESET}"          
+        return f"{Fore.GREEN}Email {value_old} for contact {name.capitalize()} was updated to {value_new}.{Fore.RESET}"
     else:
         record_phone = record.find_phone(value_old)
         if record_phone is None:
-            return f"{Fore.RED}Phone {value_old} for contact {name} not found.{Fore.RESET}"
+            return (
+                f"{Fore.RED}Phone {value_old} for contact {name} not found.{Fore.RESET}"
+            )
         record.remove_phone(value_old)
         record.add_phone(value_new)
         return f"{Fore.GREEN}Phone {value_old} for contact {name.capitalize()} was updated to {value_new}.{Fore.RESET}"
@@ -88,10 +92,11 @@ def rename_contact(args, book: AddressBook):
         raise KeyError
     if book.find(new_name):
         return f"{Fore.RED}Contact with name {new_name} already exists.{Fore.RESET}"
-    # remove old record, update name, and add it with new name
-    book.remove_contact(old_name)
-    record.name.value = new_name
-    book.add_contact(record)
+    # # remove old record, update name, and add it with new name
+    # book.remove_contact(old_name)
+    # record.name.value = new_name
+    # book.add_contact(record)
+    book.update_contact(old_name, name=new_name)
     return f"{Fore.GREEN}Contact {old_name.lower().capitalize()} was renamed to {new_name.lower().capitalize()}.{Fore.RESET}"
 
 
@@ -188,4 +193,3 @@ def add_address(args, book):
     else:
         record.add_address(address)
     return f"{Fore.GREEN}Address was added to contact {name}.{Fore.RESET}"
-

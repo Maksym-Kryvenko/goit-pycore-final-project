@@ -21,7 +21,7 @@ def print_help():
         "birthdays": "Sow upcoming birthdays",  # COMPLETE
         "search": "Search for a contact",  # COMPLETE
         "add-address": "Add or edit contact's address",  # COMPLETE
-        "rename": "Rename existing contact",  # COMPLETE
+        "rename": "Rename existing contact",  # WIP
         "del": "Delete a contact",  # COMPLETE
         "": "",
         "Commands for notes:": "",
