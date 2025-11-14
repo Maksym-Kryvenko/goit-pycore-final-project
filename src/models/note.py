@@ -1,5 +1,6 @@
 from datetime import datetime
 import uuid
+from typing import Optional
 from .fields import NoteText, NoteTag
 
 
@@ -9,12 +10,12 @@ class Note:
     def __init__(
         self,
         content: str,
-        contact_name: str = None,
+        contact: Optional['Contact'] = None,
         tags: tuple = None,
     ):
         self.id = str(uuid.uuid4())
         self.content = NoteText(content) if content else NoteText("")
-        self.contact_name = contact_name
+        self.contact = contact
         self.tags = [NoteTag(tag) for tag in tags] if tags else []
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
@@ -22,36 +23,37 @@ class Note:
     def add_tags(self, *tags: str) -> None:
         """Add one or more tags to the note."""
         for tag in tags:
-            tag_clean = tag.strip().lower()
-            if tag_clean and tag_clean not in self.tags:
-                self.tags.append(tag_clean)
+            tag_obj = NoteTag(tag)
+            if tag_obj.value and tag_obj not in self.tags:
+                self.tags.append(tag_obj)
         self.updated_at = datetime.now()
 
     def remove_tag(self, tag: str) -> None:
         """Remove a tag from the note."""
-        tag_clean = tag.strip().lower()
-        if tag_clean in self.tags:
-            self.tags.remove(tag_clean)
+        tag_obj = NoteTag(tag)
+        if tag_obj in self.tags:
+            self.tags.remove(tag_obj)
             self.updated_at = datetime.now()
 
-    # TODO: Implement relationship with Contact objects.
-    def link_to_contact(self, contact_name: str) -> None:
+    def link_to_contact(self, contact: 'Contact') -> None:
         """Link note to a contact."""
-        self.contact_name = contact_name
+        self.contact = contact
         self.updated_at = datetime.now()
 
     def unlink_contact(self) -> None:
         """Remove contact link from note."""
-        self.contact_name = None
+        self.contact = None
         self.updated_at = datetime.now()
 
     def __str__(self) -> str:
-        contact_str = f" [{self.contact_name}]" if self.contact_name else ""
-        tags_str = f" #{' #'.join(self.tags)}" if self.tags else ""
-        return f"Note{contact_str}: {self.content[:50]}...{tags_str}"
+        contact_str = f" [{self.contact.name.value}]" if self.contact else ""
+        tags_str = f" #{' #'.join(str(tag.value) for tag in self.tags)}" if self.tags else ""
+        content_str = str(self.content.value)[:50] if hasattr(self.content, 'value') else str(self.content)[:50]
+        return f"Note{contact_str}: {content_str}...{tags_str}"
 
     def __repr__(self) -> str:
-        return f"Note(id='{self.id[:8]}...', content='{self.content[:30]}...')"
+        content_str = str(self.content.value)[:30] if hasattr(self.content, 'value') else str(self.content)[:30]
+        return f"Note(id='{self.id[:8]}...', content='{content_str}...')"
 
     def __eq__(self, other) -> bool:
         """Compare notes by id."""
