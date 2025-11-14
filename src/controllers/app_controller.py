@@ -2,11 +2,13 @@ from typing import Callable
 
 from src.cli.view import View
 from src.services.assistent import Assistent
+from src.services.note_assistant import NoteAssistant
 
 
 class AppController:
-    def __init__(self, assistent: Assistent, view: View):
+    def __init__(self, view: View, assistent: Assistent, note_assistent: NoteAssistant):
         self.assistent = assistent
+        self.note_assistent = note_assistent
         self.view = view
         self.commands: dict[str, Callable[[list[str]], None]] = {
             "help": self.cmd_help,
@@ -49,7 +51,7 @@ class AppController:
 
     def cmd_add(self, args):
         """Add a new contact to the contacts dictionary."""
-        
+
         if len(args) < 2:
             raise ValueError("Usage: add [name] [phone]")
         name, phone = args[0], args[1]
@@ -71,9 +73,18 @@ class AppController:
         contacts_phones = self.assistent.get_phone(search)
 
         if contacts_phones:
-            self.view.render_show_phone(success=True, data={"contacts_phones": contacts_phones})
+            self.view.render_show_phone(
+                success=True, data={"contacts_phones": contacts_phones}
+            )
         else:
-            self.view.render_show_phone(success=False, data={"error": "Contact not found", "status_code": 404, "search": search})
+            self.view.render_show_phone(
+                success=False,
+                data={
+                    "error": "Contact not found",
+                    "status_code": 404,
+                    "search": search,
+                },
+            )
 
     def cmd_show_all(self, _args):
         records = self.assistent.get_all_contacts()
@@ -84,18 +95,26 @@ class AppController:
             raise ValueError("Usage: add-birthday [name] [birthday]")
         name, birthday, *_ = args
         record = self.assistent.add_birthday(name, birthday)
-        self.view.render_add_birthday(success=True, data={"name": record.name.value, "birthday": record.birthday.value})
+        self.view.render_add_birthday(
+            success=True,
+            data={"name": record.name.value, "birthday": record.birthday.value},
+        )
 
     def cmd_show_birthday(self, args):
         if len(args) < 1:
             raise ValueError("Usage: show-birthday [name]")
         name, *_ = args
         birthday = self.assistent.show_birthday(name)
-        
+
         if birthday:
-            self.view.render_show_birthday(success=True, data={"name": name, "birthday": birthday})
+            self.view.render_show_birthday(
+                success=True, data={"name": name, "birthday": birthday}
+            )
         else:
-            self.view.render_show_birthday(success=False, data={"error": "Contact not found", "status_code": 404, "name": name})
+            self.view.render_show_birthday(
+                success=False,
+                data={"error": "Contact not found", "status_code": 404, "name": name},
+            )
 
     def cmd_birthdays(self, _args):
         records = self.assistent.birthdays()
@@ -105,7 +124,10 @@ class AppController:
         data_saved = self.assistent.save_data()
         self._running = False
         if data_saved:
-            self.view.render_exit(success=True, data={"message": "Data saved successfully"})
+            self.view.render_exit(
+                success=True, data={"message": "Data saved successfully"}
+            )
         else:
-            self.view.render_exit(success=False, data={"error": "Failed to save data", "status_code": 500})
-
+            self.view.render_exit(
+                success=False, data={"error": "Failed to save data", "status_code": 500}
+            )
