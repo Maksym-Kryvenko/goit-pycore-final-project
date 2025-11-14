@@ -101,3 +101,4 @@ class Contact:
         if not isinstance(other, Contact):
             return False
         return self.name.value == other.name.value
+
