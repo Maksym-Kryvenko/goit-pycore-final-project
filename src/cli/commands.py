@@ -1,6 +1,7 @@
 from colorama import Fore
 from src.models.address_book import AddressBook
 from src.models.contact import Contact
+from src.models.fields import Name
 
 
 class InputPhoneError(Exception):
@@ -37,35 +38,61 @@ def input_error(func):
 
 @input_error
 def add_contact(args, book: AddressBook):
-    """Add a new contact to the contacts dictionary."""
+    """Add a new contact to the contacts dictionary or add phone and emeil to existing contact"""
     name, *rest = args
-    phone = rest[0] if rest else None
+    phone_or_email = rest[0] if rest else None
     record = book.find(name)
     message = f"{Fore.GREEN}Contact updated.{Fore.RESET}"
     if record is None:
         record = Contact(name)
         book.add_contact(record)
         message = f"{Fore.GREEN}Contact added.{Fore.RESET}"
-    if phone:
-        record.add_phone(phone)
+    if phone_or_email:
+        if "@" in phone_or_email:
+            record.add_email(phone_or_email)
+        else:
+            record.add_phone(phone_or_email)
     return message
 
 
 @input_error
 def change_contact(args, book: AddressBook):
-    """Change the phone number of an existing contact."""
-    name, phone_old, phone_new = args[0], args[1], args[2]
+    """Change the phone number or email of an existing contact."""
+    name, value_old, value_new = args[0], args[1], args[2]
     record = book.find(name)
     if record is None:
         raise KeyError
 
-    record_phone = record.find_phone(phone_old)
-    if record_phone is None:
-        return f"{Fore.RED}Phone {phone_old} for contact {name} not found.{Fore.RESET}"
+    if "@" in value_old:
+        record_email = record.find_email(value_old)
+        if record_email is None:
+            return f"{Fore.RED}Email {value_old} for contact {name} not found.{Fore.RESET}"
+        record.remove_email(value_old)
+        record.add_email(value_new)
+        return f"{Fore.GREEN}Email {value_old} for contact {name.capitalize()} was updated to {value_new}.{Fore.RESET}"          
+    else:
+        record_phone = record.find_phone(value_old)
+        if record_phone is None:
+            return f"{Fore.RED}Phone {value_old} for contact {name} not found.{Fore.RESET}"
+        record.remove_phone(value_old)
+        record.add_phone(value_new)
+        return f"{Fore.GREEN}Phone {value_old} for contact {name.capitalize()} was updated to {value_new}.{Fore.RESET}"
 
-    record.remove_phone(phone_old)
-    record.add_phone(phone_new)
-    return f"{Fore.GREEN}Phone {phone_old} for contact {name.capitalize()} was updated to {phone_new}.{Fore.RESET}"
+
+@input_error
+def rename_contact(args, book: AddressBook):
+    """Rename existing contact."""
+    old_name, new_name = args[0], args[1]
+    record = book.find(old_name)
+    if record is None:
+        raise KeyError
+    if book.find(new_name):
+        return f"{Fore.RED}Contact with name {new_name} already exists.{Fore.RESET}"
+    # remove old record, update name, and add it with new name
+    book.remove_contact(old_name)
+    record.name.value = new_name
+    book.add_contact(record)
+    return f"{Fore.GREEN}Contact {old_name.lower().capitalize()} was renamed to {new_name.lower().capitalize()}.{Fore.RESET}"
 
 
 @input_error
@@ -135,3 +162,30 @@ def birthdays(book: AddressBook):
             print(
                 f"{Fore.GREEN}{contact['name']}. Congratulation date: {contact['congratulation_date']}{Fore.RESET}"
             )
+
+
+@input_error
+def del_contact(args, book: AddressBook):
+    """Del the contact from the contacts dictionary."""
+    name, *_ = args
+    record = book.find(name)
+    if record:
+        book.remove_contact(name)
+        message = f"{Fore.GREEN}Contact {name.capitalize()} was deleted.{Fore.RESET}"
+    else:
+        message = f"{Fore.GREEN}Contact {name.capitalize()} not founded.{Fore.RESET}"
+    return message
+
+
+@input_error
+def add_address(args, book):
+    """Add or change contact's address"""
+    name, *address = args
+    address = " ".join([adr for adr in address])
+    record = book.find(name)
+    if record is None:
+        raise KeyError
+    else:
+        record.add_address(address)
+    return f"{Fore.GREEN}Address was added to contact {name}.{Fore.RESET}"
+
