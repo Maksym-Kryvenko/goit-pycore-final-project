@@ -20,6 +20,7 @@ TBD
 #### Quick Start
 ```python
 from src.services import NoteAssistant
+from src.models import Contact
 
 # Initialize Assistant
 assistant = NoteAssistant()
@@ -30,8 +31,9 @@ my_note = assistant.add_note("Meeting notes", tags=("work", "important"))
 # Add tags
 assistant.add_tags_to_note(my_note.id, "project", "todo")
 
-# Link to contact
-assistant.link_note_to_contact(my_note.id, "John Doe")
+# Link to contact (requires Contact object)
+contact = Contact("John Doe", phone="+38050-123-45-67")
+assistant.link_note_to_contact(my_note.id, contact)
 
 # Search
 work_notes = assistant.search_by_tags("work")
@@ -42,15 +44,15 @@ recent = assistant.sort_by_updated_date(reverse=True)
 ```
 
 #### Available Note Operations
-- `add_note(content, contact_name=None, tags=None)` - Add new note
+- `add_note(content, contact=None, tags=None)` - Add new note (contact must be Contact object)
 - `delete_note(note_id)` - Delete note
 - `find_note(note_id)` - Find note by ID
 - `add_tags_to_note(note_id, *tags)` - Add tags
 - `remove_tag_from_note(note_id, tag)` - Remove tag
-- `link_note_to_contact(note_id, contact_name)` - Link to contact
+- `link_note_to_contact(note_id, contact)` - Link to contact (contact must be Contact object)
 - `unlink_note_from_contact(note_id)` - Unlink from contact
 - `search_by_tags(*tags)` - Search by tags
-- `search_by_contact(contact_name)` - Search by contact
+- `search_by_contact(contact_name)` - Search by contact name (accepts string)
 - `get_all_notes()` - Get all notes
 - `get_all_tags()` - Get all unique tags
 - `sort_by_created_date(reverse=False)` - Sort by creation date

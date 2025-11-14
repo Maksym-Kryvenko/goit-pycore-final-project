@@ -1,6 +1,6 @@
 """Assistant for Note and NoteBook operations."""
 from typing import Optional
-from ..models import Note, NoteBook
+from ..models import Note, NoteBook, Contact
 
 
 class NoteAssistant:
@@ -12,11 +12,11 @@ class NoteAssistant:
     def add_note(
         self,
         content: str,
-        contact_name: Optional[str] = None,
+        contact: Optional[Contact] = None,
         tags: Optional[tuple] = None
     ) -> Note:
         """Add a new note."""
-        note = Note(content=content, contact_name=contact_name, tags=tags)
+        note = Note(content=content, contact=contact, tags=tags)
         self.notebook.add_note(note)
         return note
 
@@ -48,11 +48,11 @@ class NoteAssistant:
             return True
         return False
 
-    def link_note_to_contact(self, note_id: str, contact_name: str) -> bool:
+    def link_note_to_contact(self, note_id: str, contact: Contact) -> bool:
         """Link a note to a contact."""
         note = self.find_note(note_id)
         if note:
-            note.link_to_contact(contact_name)
+            note.link_to_contact(contact)
             return True
         return False
 

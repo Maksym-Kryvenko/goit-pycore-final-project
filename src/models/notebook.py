@@ -36,7 +36,7 @@ class NoteBook(UserDict):
         """Search notes by contact name."""
         results = []
         for note in self.data.values():
-            if note.contact_name and contact_name.lower() in note.contact_name.lower():
+            if note.contact and contact_name.lower() in note.contact.name.value.lower():
                 results.append(note)
         return results
 
