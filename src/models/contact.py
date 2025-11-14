@@ -1,3 +1,4 @@
+from src.helpers.is_birthday_within_next_days import is_birthday_within_next_days
 from .fields import Name, Phone, Email, Address, Birthday
 
 
@@ -72,6 +73,9 @@ class Contact:
             # If the email address is invalid, return None to indicate not found
             pass
         return None
+
+    def is_birthday_next_week(self) -> bool:
+        return is_birthday_within_next_days(self.birthday.value, 7)
 
     def __str__(self) -> str:
         parts = [f"Name: {self.name.value}"]
