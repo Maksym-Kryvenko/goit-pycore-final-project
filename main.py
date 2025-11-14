@@ -11,7 +11,7 @@ from src.services.storage import load_data
 def main():
     address_book, note_book = load_data()
     assistent = Assistent(address_book)
-    note_assistent = NoteAssistant(note_book)
+    note_assistent = NoteAssistant(note_book, address_book)
     view = ConsoleView()
     app_controller = AppController(view, assistent, note_assistent)
     app_controller.run()
