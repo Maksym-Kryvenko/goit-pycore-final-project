@@ -2,11 +2,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.box import ROUNDED
 
-
-def print_help():
-    console = Console()
-
-    commands = {
+COMMANDS = {
         "Commands for contacts:": "",
         " ------------------ ": "",
         "hello": "Greet the user",  # COMPLETE
@@ -40,6 +36,10 @@ def print_help():
         "sort-updated": "Sort notes by updated date",  # WIP
     }
 
+def print_help():
+    console = Console()
+
+    
     # Create table
     table = Table(
         title="[bold green]List of commands[/bold green]", box=ROUNDED, show_header=True
@@ -50,7 +50,7 @@ def print_help():
     table.add_column("Description", style="green")
 
     # Add rows
-    for command, description in commands.items():
+    for command, description in COMMANDS.items():
         table.add_row(command, description)
 
     console.print("\nWelcome to yuor Personal Assistant!\n", style="green")

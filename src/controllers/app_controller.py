@@ -47,9 +47,9 @@ class AppController:
     def run(self) -> None:
         self.view.render_welcome()
         self.view.render_help_proposal()
-
+        self._update_view_data()
         while self._running:
-            raw = self.view.prompt("> ")
+            raw = self.view.prompt(self.assistent.get_all_contacts(), self.note_assistent.get_all_notes())
             if not raw:
                 continue
             cmd, *args = raw.split()
@@ -74,9 +74,9 @@ class AppController:
         if len(args) < 2:
             raise ValueError("Usage: add [name] [phone]")
         name, phone = args[0], args[1]
-        action, record = self.assistent.add_contact(name, phone)
+        action, contact = self.assistent.add_contact(name, phone)
 
-        self.view.render_add(success=True, data={"action": action, "record": record})
+        self.view.render_add(success=True, data={"action": action, "contact": contact})
 
     def cmd_change(self, args: list[str]) -> None:
         if len(args) < 3:
@@ -90,7 +90,7 @@ class AppController:
             raise ValueError("Usage: rename [name] [new_name]")
         name, new_name, *_ = args
         contact = self.assistent.rename_contact(name, new_name)
-        self.view.render_rename(success=True, data={"contact": contact})
+        self.view.render_rename(success=True, data={"contact": contact, "old_name": name, "new_name": new_name})
 
     def cmd_add_address(self, args: list[str]) -> None:
         if len(args) < 2:
@@ -111,7 +111,7 @@ class AppController:
             raise ValueError("Usage: search [query]")
         query, *_ = args
         contacts = self.assistent.search_contacts(query)
-        self.view.render_contacts(success=True, data={"contacts": contacts})
+        self.view.render_contacts(success=True, data={"contacts": contacts, "search": query})
 
     def cmd_show_phone(self, args: list[str]) -> None:
         if len(args) < 1:
@@ -119,7 +119,7 @@ class AppController:
         search, *_ = args
         contacts = self.assistent.search_contacts(search)
 
-        self.view.render_show_phone(success=True, data={"contacts": contacts})
+        self.view.render_show_phone(success=True, data={"contacts": contacts, "search": search})
 
     def cmd_show_all(self, _args: list[str]) -> None:
         records = self.assistent.get_all_contacts()
@@ -139,17 +139,11 @@ class AppController:
         if len(args) < 1:
             raise ValueError("Usage: show-birthday [name]")
         name, *_ = args
-        birthday = self.assistent.show_birthday(name)
+        contacts = self.assistent.show_birthday(name)
 
-        if birthday:
-            self.view.render_show_birthday(
-                success=True, data={"name": name, "birthday": birthday}
-            )
-        else:
-            self.view.render_show_birthday(
-                success=False,
-                data={"error": "Contact not found", "status_code": 404, "name": name},
-            )
+        self.view.render_show_birthday(
+            success=True, data={"contacts": contacts, "search": name}
+        )
 
     def cmd_birthdays(self, _args: list[str]) -> None:
         data = self.assistent.birthdays()
@@ -213,7 +207,7 @@ class AppController:
     def cmd_link_contact(self, args: list[str]) -> None:
         if len(args) < 2:
             raise ValueError("Usage: link-contact [note_id] [contact_id]")
-        note_id, contact_id, *_ = args
+        contact_id, note_id, *_ = args
         self.note_assistent.link_note_to_contact(note_id, contact_id)
         self.view.render_link_contact(
             success=True, data={"note_id": note_id, "contact_id": contact_id}
@@ -252,3 +246,9 @@ class AppController:
             self.view.render_exit(
                 success=False, data={"error": "Failed to save data", "status_code": 500}
             )
+
+
+    def _update_view_data(self) -> None:
+        contacts = list(self.assistent.get_all_contacts())
+        notes = list(self.note_assistent.get_all_notes())
+        self.view.update_data(contacts=contacts, notes=notes)

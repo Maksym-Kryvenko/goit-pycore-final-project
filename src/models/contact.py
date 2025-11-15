@@ -75,7 +75,7 @@ class Contact:
         return None
 
     def is_birthday_next_week(self) -> bool:
-        return is_birthday_within_next_days(self.birthday.value, 7)
+        return self.birthday.value and is_birthday_within_next_days(self.birthday.value, 7)
 
     def __str__(self) -> str:
         parts = [f"Name: {self.name.value}"]

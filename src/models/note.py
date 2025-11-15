@@ -13,11 +13,12 @@ class Note:
         contact: str = None,
         tags: tuple = None,
     ):
-        self.id = str(uuid.uuid4())
+        # Use shorter ID: first 8 hex characters of UUID
+        self.id = uuid.uuid4().hex[:8]
         self.content = NoteText(content) if content else NoteText("")
         self.contact = contact
         self.tags = [NoteTag(tag) for tag in tags] if tags else []
-        self.created_at = datetime.now()
+        self.created_at = Da
         self.updated_at = datetime.now()
 
     def add_tags(self, *tags: str) -> None:
@@ -67,7 +68,7 @@ class Note:
             if hasattr(self.content, "value")
             else str(self.content)[:30]
         )
-        return f"Note(id='{self.id[:8]}...', content='{content_str}...')"
+        return f"Note(id='{self.id}', content='{content_str}', contact='{self.contact}', tags='{self.tags}', created_at='{self.created_at}', updated_at='{self.updated_at}')"
 
     def __eq__(self, other) -> bool:
         """Compare notes by id."""

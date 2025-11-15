@@ -89,23 +89,13 @@ class Assistent:
     def search_contacts(self, query: str) -> list[Contact]:
         return sorted(self.address_book.search_contacts(query), key=lambda contact: str(contact.name))
 
-    # def get_phone(self, name: str) -> dict[str, list[str]]:
-    #     contacts = self.address_book.search_contacts(name)
-    #     if not contacts:
-    #         raise ValueError(f"Contacts with name: {name} not found")
-
-    #     return [{ 
-    #         "name": str(contact.name),
-    #         "phones": [str(phone) for phone in contact.phones]
-    #         } for contact in contacts]
-
     def get_all_contacts(self) -> list[Contact]:
         return sorted(self.address_book.data.values(), key=lambda contact: str(contact.name))
 
     def show_birthday(self, name: str) -> str:
-        record = self._find_contact(name)
+        contacts = self.search_contacts(name)
 
-        return record.birthday
+        return contacts
 
     def birthdays(self) -> list[dict]:
         contacts = list(filter(lambda contact: contact.is_birthday_next_week(), self.get_all_contacts()))
