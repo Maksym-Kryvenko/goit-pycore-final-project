@@ -11,7 +11,7 @@ def print_help():
         " ------------------ ": "",
         "hello": "Greet the user",  # COMPLETE
         "?/help": "Show all commands",  # COMPLETE
-        "close/exit": "Exit the application",  # COMPLETE
+        "quit/exit": "Exit the application",  # COMPLETE
         "add": "Add a contact with phone number or email",  # COMPLETE
         "change": "Modify a contact number or email",  # COMPLETE
         "phone": "Show the contact's phones numbers",  # COMPLETE
@@ -22,22 +22,22 @@ def print_help():
         "search": "Search for a contact",  # COMPLETE
         "add-address": "Add or edit contact's address",  # COMPLETE
         "rename": "Rename existing contact",  # WIP
-        "del": "Delete a contact",  # COMPLETE
+        "delete": "Delete a contact",  # COMPLETE
         "": "",
         "Commands for notes:": "",
         " ------------------": "",
-        "add_note": "Add a note",  # WIP
-        "edit_note": "Edit a note",  # WIP
-        "delete_note": "Delete a note",  # WIP
-        "search_notes": "Search for a note",  # WIP
-        "all_notes": "Show all notes",  # WIP
-        "add_tag": "Add a tag for a note",  # WIP
-        "remove_tag": "Remove a note's tag",  # WIP
-        "get_tags": "Get all unique tags",  # WIP
-        "link_contact": "Link note to a contact",  # WIP
-        "unlink_contact": "Unlink note from a contact",  # WIP
-        "sort_created": "Sort notes by created date",  # WIP
-        "sort_updated": "Sort notes by updated date",  # WIP
+        "add-note": "Add a note",  # WIP
+        "edit-note": "Edit a note",  # WIP
+        "delete-note": "Delete a note",  # WIP
+        "search-notes": "Search for a note",  # WIP
+        "all-notes": "Show all notes",  # WIP
+        "add-tag": "Add a tag for a note",  # WIP
+        "remove-tag": "Remove a note's tag",  # WIP
+        "get-tags": "Get all unique tags",  # WIP
+        "link-contact": "Link note to a contact",  # WIP
+        "unlink-contact": "Unlink note from a contact",  # WIP
+        "sort-created": "Sort notes by created date",  # WIP
+        "sort-updated": "Sort notes by updated date",  # WIP
     }
 
     # Create table

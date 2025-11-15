@@ -1,6 +1,6 @@
 """Assistant for Note and NoteBook operations."""
 from typing import Optional
-from src.models import Note, NoteBook, Contact, AddressBook
+from src.models import Note, NoteBook, AddressBook
 from src.services.storage import save_pkl_book
 from src.config import DEFAULT_NOTEBOOK_FILENAME
 
@@ -63,6 +63,9 @@ class NoteAssistant:
             note.unlink_contact()
             return True
         return False
+
+    def search(self, query: str) -> list:
+        self.search_by_tags(query.split()) or self.search_by_contact(query)
 
     def search_by_tags(self, *tags: str) -> list:
         """Search notes by tags."""

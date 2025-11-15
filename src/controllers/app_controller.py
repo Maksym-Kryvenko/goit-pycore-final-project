@@ -28,18 +28,18 @@ class AppController:
             "show-birthday": self.cmd_show_birthday,
             "birthdays": self.cmd_birthdays,
             # Note commands
-            "add_note": self.cmd_add_note,
-            "edit_note": self.cmd_edit_note,
-            "delete_note": self.cmd_delete_note,
-            "search_notes": self.cmd_search_notes,
-            "all_notes": self.cmd_all_notes,
-            "add_tag": self.cmd_add_tag,
-            "remove_tag": self.cmd_remove_tag,
-            "get_tags": self.cmd_get_tags,
-            "link_contact": self.cmd_link_contact,
-            "unlink_contact": self.cmd_unlink_contact,
-            "sort_created": self.cmd_sort_created,
-            "sort_updated": self.cmd_sort_updated,
+            "add-note": self.cmd_add_note,
+            "edit-note": self.cmd_edit_note,
+            "delete-note": self.cmd_delete_note,
+            "search-notes": self.cmd_search_notes,
+            "all-notes": self.cmd_all_notes,
+            "add-tag": self.cmd_add_tag,
+            "remove-tag": self.cmd_remove_tag,
+            "get-tags": self.cmd_get_tags,
+            "link-contact": self.cmd_link_contact,
+            "unlink-contact": self.cmd_unlink_contact,
+            "sort-created": self.cmd_sort_created,
+            "sort-updated": self.cmd_sort_updated,
         }
         self._running = True
 
@@ -57,7 +57,7 @@ class AppController:
                 try:
                     handler(args)
                 except Exception as exc:
-                    self.view.render_error(success=False, data={"error": str(exc)})
+                    self.view.render_error(data={"error": str(exc)})
             else:
                 self.view.invalid_command()
 
@@ -160,40 +160,85 @@ class AppController:
         self.view.render_birthdays(success=True, data={"birthdays": records})
 
     def cmd_add_note(self, args):
-        pass
+        if len(args) < 1:
+            raise ValueError("Usage: add-note [content]")
+        content, *_ = args
+        note = self.note_assistent.add_note(content)
+        self.view.render_add_note(success=True, data={"note": note})
 
     def cmd_edit_note(self, args):
-        pass
+        if len(args) < 2:
+            raise ValueError("Usage: edit-note [note_id] [content]")
+        note_id, content, *_ = args
+        note = self.note_assistent.edit_note(note_id, content)
+        self.view.render_edit_note(success=True, data={"note": note})
 
     def cmd_delete_note(self, args):
-        pass
+        if len(args) < 1:
+            raise ValueError("Usage: delete-note [note_id]")
+        note_id, *_ = args
+        self.note_assistent.delete_note(note_id)
+        self.view.render_delete_note(success=True, data={"note_id": note_id})
 
+    # TODO: add search by tags and contact, search by content is not implemented yet
     def cmd_search_notes(self, args):
-        pass
+        if len(args) < 1:
+            raise ValueError("Usage: search-notes [query]")
+        query, *_ = args
+        notes = self.note_assistent.search_notes(query)
+        self.view.render_search_notes(success=True, data={"notes": notes})
 
-    def cmd_all_notes(self, args):
-        pass
+    def cmd_all_notes(self, _args):
+        self.view.render_all_notes(success=True, data={"notes": self.note_assistent.get_all_notes()})
 
     def cmd_add_tag(self, args):
-        pass
+        if len(args) < 2:
+            raise ValueError("Usage: add-tag [note_id] [tag]")
+        note_id, tag, *_ = args
+        self.note_assistent.add_tags_to_note(note_id, tag)
+        self.view.render_add_tag(success=True, data={"note_id": note_id, "tag": tag})
 
     def cmd_remove_tag(self, args):
-        pass
+        if len(args) < 2:
+            raise ValueError("Usage: remove-tag [note_id] [tag]")
+        note_id, tag, *_ = args
+        self.note_assistent.remove_tag_from_note(note_id, tag)
+        self.view.render_remove_tag(success=True, data={"note_id": note_id, "tag": tag})
 
     def cmd_get_tags(self, args):
-        pass
+        if len(args) < 1:
+            raise ValueError("Usage: get-tags [note_id]")
+        note_id, *_ = args
+        tags = self.note_assistent.get_all_tags(note_id)
+        self.view.render_get_tags(success=True, data={"note_id": note_id, "tags": tags})
 
     def cmd_link_contact(self, args):
-        pass
+        if len(args) < 2:
+            raise ValueError("Usage: link-contact [note_id] [contact_id]")
+        note_id, contact_id, *_ = args
+        self.note_assistent.link_note_to_contact(note_id, contact_id)
+        self.view.render_link_contact(success=True, data={"note_id": note_id, "contact_id": contact_id})
 
     def cmd_unlink_contact(self, args):
-        pass
+        if len(args) < 1:
+            raise ValueError("Usage: unlink-contact [note_id]")
+        note_id, *_ = args
+        self.note_assistent.unlink_note_from_contact(note_id)
+        self.view.render_unlink_contact(success=True, data={"note_id": note_id})
 
     def cmd_sort_created(self, args):
-        pass
+        if len(args) < 1:
+            raise ValueError("Usage: sort-created [reverse]")
+        reverse, *_ = args
+        result = self.note_assistent.sort_by_created_date(reverse)
+        self.view.render_sort_created(success=True, data={"notes": result})
 
     def cmd_sort_updated(self, args):
-        pass
+        if len(args) < 1:
+            raise ValueError("Usage: sort-updated [reverse]")
+        reverse, *_ = args
+        result = self.note_assistent.sort_by_updated_date(reverse)
+        self.view.render_sort_updated(success=True, data={"notes": result})
 
     def cmd_exit(self, _):
         data_saved = self.assistent.save_data() and self.note_assistent.save_data()

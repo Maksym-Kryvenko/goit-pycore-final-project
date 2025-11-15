@@ -1,6 +1,5 @@
 from datetime import datetime
 import uuid
-from typing import Optional
 from src.models.fields import NoteText, NoteTag
 from src.models.address_book import AddressBook
 

@@ -74,3 +74,35 @@ class View(ABC):
     @abstractmethod
     def render_rename(self, success: bool, data: dict) -> None:
         raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_all_notes(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_add_tag(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_remove_tag(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_get_tags(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_link_contact(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_unlink_contact(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_sort_created(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_sort_updated(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")

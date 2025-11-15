@@ -1,5 +1,6 @@
 from collections import UserDict
 from .note import Note
+from .fields import NoteTag
 
 
 class NoteBook(UserDict):
@@ -22,9 +23,10 @@ class NoteBook(UserDict):
         """Find a note by id."""
         return self.data.get(note_id)
 
+
+    # TODO: add search by content
     def search_by_tags(self, *tags: str) -> list:
         """Search notes by one or multiple tags."""
-        from .fields import NoteTag
         tags_objs = [NoteTag(tag) for tag in tags]
         results = []
         for note in self.data.values():
