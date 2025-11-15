@@ -52,6 +52,41 @@ class Assistent:
 
             return record
 
+    def rename_contact(self, name: str, new_name: str):
+        record = self.address_book.find(name)
+        if not record:
+            raise ValueError("Contact not found, please check the name")
+        if self.address_book.find(new_name):
+            raise ValueError(f"Contact with name {new_name} already exists.")
+        self.address_book.update_contact(name, name=new_name)
+
+        return record
+
+    def add_address(self, name: str, address: str) -> Contact:
+        record = self.address_book.find(name)
+        if record is None:
+            raise ValueError("Contact not found, please check the name")
+        else:
+            record.add_address(address)
+        return record
+
+    def add_birthday(self, name: str, birth: str) -> Contact:
+        record = self.address_book.find(name)
+        if record is None:
+            raise ValueError("Contact not found, please check the name")
+        else:
+            record.add_birthday(birth)
+        return record
+
+    def delete_contact(self, name: str) -> Contact:
+        record = self.address_book.find(name)
+        if record is None:
+            raise ValueError("Contact not found, please check the name")
+        else:
+            self.address_book.remove_contact(name)
+        return record
+
+
     def get_phone(self, name: str) -> str:
         contacts = self.address_book.search_contacts(name)
         if contacts is None:
@@ -64,14 +99,6 @@ class Assistent:
 
     def get_all_contacts(self) -> list[Contact]:
         return self.address_book.data.values()
-
-    def add_birthday(self, name: str, birth: str) -> Contact:
-        record = self.address_book.find(name)
-        if record is None:
-            raise ValueError("Contact not found, please check the name")
-        else:
-            record.add_birthday(birth)
-        return record
 
     def show_birthday(self, name: str) -> str:
         record = self.address_book.find(name)

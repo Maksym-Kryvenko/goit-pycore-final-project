@@ -62,3 +62,15 @@ class View(ABC):
     @abstractmethod
     def render_birthdays(self, success: bool, data: dict) -> None:
         raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_add_address(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_delete(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    @abstractmethod
+    def render_rename(self, success: bool, data: dict) -> None:
+        raise NotImplementedError("Subclasses must implement this method")

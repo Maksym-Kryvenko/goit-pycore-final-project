@@ -20,6 +20,9 @@ class AppController:
             "add": self.cmd_add,
             "change": self.cmd_change,
             "phone": self.cmd_show_phone,
+            "rename": self.cmd_rename,
+            "add-address": self.cmd_add_address,
+            "delete": self.cmd_delete,
             "all": self.cmd_show_all,
             "add-birthday": self.cmd_add_birthday,
             "show-birthday": self.cmd_show_birthday,
@@ -80,6 +83,27 @@ class AppController:
         name, old_phone, new_phone, *_ = args
         contact = self.assistent.change_contact(name, old_phone, new_phone)
         self.view.render_change(success=True, data={"contact": contact})
+
+    def cmd_rename(self, args):
+        if len(args) < 2:
+            raise ValueError("Usage: rename [name] [new_name]")
+        name, new_name, *_ = args
+        contact = self.assistent.rename_contact(name, new_name)
+        self.view.render_rename(success=True, data={"contact": contact})
+
+    def cmd_add_address(self, args):
+        if len(args) < 2:
+            raise ValueError("Usage: add-address [name] [address]")
+        name, address, *_ = args
+        contact = self.assistent.add_address(name, address)
+        self.view.render_add_address(success=True, data={"contact": contact})
+
+    def cmd_delete(self, args):
+        if len(args) < 1:
+            raise ValueError("Usage: delete [name]")
+        name, *_ = args
+        self.assistent.delete_contact(name)
+        self.view.render_delete(success=True, data={"name": name})
 
     def cmd_show_phone(self, args):
         if len(args) < 1:

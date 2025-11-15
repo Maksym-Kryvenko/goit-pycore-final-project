@@ -94,6 +94,33 @@ Commands:
 
         pass
 
+    def render_add_address(self, success: bool, data: dict) -> None:
+        if not success:
+            if data.get("error"):
+                self._show_error(data.get("error"))
+            else:
+                self._show_error("Something went wrong")
+        else:
+            self._show(f"New {data.get('record')} was successful created")
+
+    def render_delete(self, success: bool, data: dict) -> None:
+        if not success:
+            if data.get("error"):
+                self._show_error(data.get("error"))
+            else:
+                self._show_error("Something went wrong")
+        else:
+            self._show(f"New {data.get('record')} was successful deleted")
+
+    def render_rename(self, success: bool, data: dict) -> None:
+        if not success:
+            if data.get("error"):
+                self._show_error(data.get("error"))
+            else:
+                self._show_error("Something went wrong")
+        else:
+            self._show(f"New {data.get('record')} was successful renamed")
+
     def render_show_birthday(self, success: bool, data: dict) -> None:
         if not success:
             if data.get("error"):
