@@ -1,8 +1,8 @@
-import textwrap
-from src.cli.view import View
-from src.cli.commands_list import print_help
-from src.models import Contact, Note
-from src.models.fields import NoteTag
+from src.view.view import View
+from src.view.console.commands_list import print_help
+from src.view.console import contact as contact_renderer
+from src.view.console import notes as notes_renderer
+from src.view.console import tags as tags_renderer
 
 
 class ConsoleView(View):
@@ -47,6 +47,12 @@ class ConsoleView(View):
 
         self._show(f"{data.get('contact', data.get('record'))} was successful updated")
 
+    def render_contacts(self, success: bool, data: dict) -> None:
+        if not success:
+            return self.render_error(data)
+
+        self._show(f"Search results:\n{contact_renderer.render_contacts(data.get('contacts'))}")
+
     def render_show_phone(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
@@ -57,13 +63,13 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(f"All contacts:\n{self._render_contacts(data.get('contacts'))}")
+        self._show(f"All contacts:\n{contact_renderer.render_contacts(data.get('contacts'))}")
 
     def render_add_birthday(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"New {data} was successful created")
+        self._show(f"Updated brithday for {data.get('name')}, new values is {data.get('birthday')}")
 
     def render_add_address(self, success: bool, data: dict) -> None:
         if not success:
@@ -93,7 +99,7 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(f"Birthdays: {data.get('birthdays')}")
+        self._show(f"Birthdays:\n{contact_renderer.render_upcoming_birthdays(data)}")
 
     def render_add_note(self, success: bool, data: dict) -> None:
         if not success:
@@ -117,13 +123,13 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(f"Search results:\n{data.get('notes')}")
+        self._show(f"Search results:\n{notes_renderer.render_notes(data.get('notes'))}")
 
     def render_list_notes(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"All notes:\n{data.get('notes')}")
+        self._show(f"All notes:\n{notes_renderer.render_notes(data.get('notes'))}")
 
     def render_add_tag(self, success: bool, data: dict) -> None:
         if not success:
@@ -137,15 +143,13 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(
-            f"{data.get('note_id')} was successful untagged with {self._render_tags([data.get('tag')])}"
-        )
+        self._show(f"{data.get('note_id')} was successful untagged with {tags_renderer.render_tags([data.get('tag')])}")
 
     def render_get_tags(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"Tags:\n{self._render_tags(data.get('tags'))}")
+        self._show(f"Tags:\n{tags_renderer.render_tags(data.get('tags'))}")
 
     def render_link_contact(self, success: bool, data: dict) -> None:
         if not success:
@@ -167,23 +171,19 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(
-            f"Notes sorted by created date:\n{self._render_notes(data.get('notes'))}"
-        )
+        self._show(f"Notes sorted by created date:\n{notes_renderer.render_notes(data.get('notes'))}")
 
     def render_sort_updated(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(
-            f"Notes sorted by updated date:\n{self._render_notes(data.get('notes'))}"
-        )
+        self._show(f"Notes sorted by updated date:\n{notes_renderer.render_notes(data.get('notes'))}")
 
     def render_all_notes(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"All notes: {self._render_notes(data.get('notes'))}")
+        self._show(f"All notes:\n{notes_renderer.render_notes(data.get('notes'))}")
 
     def render_exit(self, success: bool, data: dict) -> None:
         if not success:
@@ -198,42 +198,3 @@ class ConsoleView(View):
 
     def _show_error(self, message: str) -> None:
         self._show(f"Error: {message}")
-
-    def _render_contacts(self, contacts: list) -> str:
-        return "\n".join([self._render_contact(contact) for contact in contacts])
-
-    def _render_contact(self, contact: Contact) -> str:
-        return textwrap.dedent(
-            f"""
-                name: {contact.name};
-                phones: {self._render_phones(contact.phones)};
-                email: {self._render_emails(contact.emails)};
-                address: {contact.address or "No address"};
-                birthday: {contact.birthday or "No birthday"};
-            """
-        ).strip()
-
-    def _render_emails(self, emails: list) -> str:
-        return ", ".join([email.value for email in emails]) or "No emails"
-
-    def _render_phones(self, phones: list) -> str:
-        return ", ".join([phone.value for phone in phones]) or "No phones"
-
-    def _render_notes(self, notes: list) -> str:
-        return "\n".join([self._render_note(note) for note in notes]) or "No notes"
-
-    def _render_note(self, note: Note) -> str:
-        return textwrap.dedent(
-            f"""
-            note id: {note.id};
-            note content: {note.content};
-            note tags: {self._render_tags(note.tags)};
-            contact: {note.contact.name if note.contact else 'No contact'}
-        """
-        ).strip()
-
-    def _render_tags(self, tags: list) -> str:
-        return ", ".join([self._render_tag(tag) for tag in tags]) or "No tags"
-
-    def _render_tag(self, tag: NoteTag) -> str:
-        return f"#{tag.value}"

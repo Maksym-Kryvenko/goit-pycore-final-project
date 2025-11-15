@@ -1,4 +1,4 @@
-from src.cli.console_view import ConsoleView
+from src.view.console_view import ConsoleView
 from src.controllers.app_controller import AppController
 from src.services.assistent import Assistent
 from src.services.note_assistant import NoteAssistant

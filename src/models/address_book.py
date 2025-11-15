@@ -2,7 +2,6 @@ from typing import List
 from collections import UserDict
 from .contact import Contact
 from .fields import Name, Phone, Email, Address, Birthday
-from datetime import datetime, timedelta
 
 
 class AddressBook(UserDict):
@@ -74,43 +73,43 @@ class AddressBook(UserDict):
         else:
             return None
 
-    def get_upcoming_birthdays(self):
-        """Get a list of users with birthdays in the next 7 days."""
-        today = datetime.today().date()
+    # def get_upcoming_birthdays(self):
+    #     """Get a list of users with birthdays in the next 7 days."""
+    #     today = datetime.today().date()
 
-        upcoming_birthdays = []
+    #     upcoming_birthdays = []
 
-        for key, user in self.data.items():
-            selected_user = {}  # Dictionary to hold user info for congratulations
-            if user.birthday is not None and user.birthday.value is not None:
-                user_birthday = user.birthday.value
-                birthday_this_year = user_birthday.replace(
-                    year=today.year
-                )  # Birthday date for the current year
-                days_until_birthday = (birthday_this_year - today).days
+    #     for key, user in self.data.items():
+    #         selected_user = {}  # Dictionary to hold user info for congratulations
+    #         if user.birthday is not None and user.birthday.value is not None:
+    #             user_birthday = user.birthday.value
+    #             birthday_this_year = user_birthday.replace(
+    #                 year=today.year
+    #             )  # Birthday date for the current year
+    #             days_until_birthday = (birthday_this_year - today).days
 
-                if (
-                    0 <= days_until_birthday <= 7
-                ):  # Check if birthday is within the next 7 days
-                    selected_user["name"] = key
-                    if (
-                        birthday_this_year.weekday() < 5
-                    ):  # Check if birthday is on a weekday
-                        selected_user[
-                            "congratulation_date"
-                        ] = birthday_this_year.strftime("%d.%m.%Y")
-                    else:  # If birthday is on weekend, set congratulation date to next Monday
-                        days_to_monday = (
-                            7 - birthday_this_year.weekday()
-                        )  # Days to next Monday
-                        congratulation_date = birthday_this_year + timedelta(
-                            days=days_to_monday
-                        )  # Calculate next Monday
-                        selected_user[
-                            "congratulation_date"
-                        ] = congratulation_date.strftime("%d.%m.%Y")
-                    upcoming_birthdays.append(selected_user)
-        return upcoming_birthdays
+    #             if (
+    #                 0 <= days_until_birthday <= 7
+    #             ):  # Check if birthday is within the next 7 days
+    #                 selected_user["name"] = key
+    #                 if (
+    #                     birthday_this_year.weekday() < 5
+    #                 ):  # Check if birthday is on a weekday
+    #                     selected_user[
+    #                         "congratulation_date"
+    #                     ] = birthday_this_year.strftime("%d.%m.%Y")
+    #                 else:  # If birthday is on weekend, set congratulation date to next Monday
+    #                     days_to_monday = (
+    #                         7 - birthday_this_year.weekday()
+    #                     )  # Days to next Monday
+    #                     congratulation_date = birthday_this_year + timedelta(
+    #                         days=days_to_monday
+    #                     )  # Calculate next Monday
+    #                     selected_user[
+    #                         "congratulation_date"
+    #                     ] = congratulation_date.strftime("%d.%m.%Y")
+    #                 upcoming_birthdays.append(selected_user)
+    #     return upcoming_birthdays
 
     def __str__(self) -> str:
         if not self.data:

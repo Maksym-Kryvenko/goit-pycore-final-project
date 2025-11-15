@@ -10,7 +10,7 @@ def print_help():
         "Commands for contacts:": "",
         " ------------------ ": "",
         "hello": "Greet the user",  # COMPLETE
-        "?/help": "Show all commands",  # COMPLETE
+        "help": "Show all commands",  # COMPLETE
         "quit/exit": "Exit the application",  # COMPLETE
         "add": "Add a contact with phone number or email",  # COMPLETE
         "change": "Modify a contact number or email",  # COMPLETE
@@ -19,7 +19,7 @@ def print_help():
         "add-birthday": "Add/change contact's birthday",  # COMPLETE
         "show-birthday": "Show a contact's birthday",  # COMPLETE
         "birthdays": "Sow upcoming birthdays",  # COMPLETE
-        "search": "Search for a contact",  # DO WE NEED THIS?
+        "search": "Search for a contact",  # COMPLETE
         "add-address": "Add or edit contact's address",  # COMPLETE
         "rename": "Rename existing contact",  # WIP
         "delete": "Delete a contact",  # COMPLETE
