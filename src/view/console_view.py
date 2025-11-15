@@ -57,7 +57,7 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(f"Phones: {data.get('contacts_phones')}")
+        self._show(f"Phones:\n{contact_renderer.render_contacts_phones(data.get('contacts'))}")
 
     def render_all(self, success: bool, data: dict) -> None:
         if not success:

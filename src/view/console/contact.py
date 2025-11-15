@@ -3,7 +3,7 @@ import textwrap
 from src.models import Contact
 
 
-def render_contacts(contacts: list) -> str:
+def render_contacts(contacts: list,) -> str:
     """Render a list of contacts."""
     if not contacts:
         return "No contacts"
@@ -21,6 +21,16 @@ def render_contact(contact: Contact) -> str:
         birthday: {str(contact.birthday) or "No birthday"};
     """).strip()
 
+
+def render_contacts_phones(contacts: list) -> str:
+    """Render a list of contacts with phones."""
+    if not contacts:
+        return "No contacts"
+    return "\n--------------------------------\n".join([render_contact_phones(contact) for contact in contacts])
+
+def render_contact_phones(contact: Contact) -> str:
+    """Render a single contact with phones."""
+    return f"{contact.name}'s phones: {render_phones(contact.phones)}"
 
 def render_phones(phones: list) -> str:
     """Render a list of phone numbers."""

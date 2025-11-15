@@ -89,12 +89,15 @@ class Assistent:
     def search_contacts(self, query: str) -> list[Contact]:
         return sorted(self.address_book.search_contacts(query), key=lambda contact: str(contact.name))
 
-    def get_phone(self, name: str) -> dict[str, list[str]]:
-        contacts = self.address_book.search_contacts(name)
-        if not contacts:
-            raise ValueError(f"Contacts with name: {name} not found")
+    # def get_phone(self, name: str) -> dict[str, list[str]]:
+    #     contacts = self.address_book.search_contacts(name)
+    #     if not contacts:
+    #         raise ValueError(f"Contacts with name: {name} not found")
 
-        return { str(contact.name): [str(phone) for phone in contact.phones] for contact in contacts }
+    #     return [{ 
+    #         "name": str(contact.name),
+    #         "phones": [str(phone) for phone in contact.phones]
+    #         } for contact in contacts]
 
     def get_all_contacts(self) -> list[Contact]:
         return sorted(self.address_book.data.values(), key=lambda contact: str(contact.name))

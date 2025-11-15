@@ -117,21 +117,9 @@ class AppController:
         if len(args) < 1:
             raise ValueError("Usage: phone [search]")
         search, *_ = args
-        contacts_phones = self.assistent.get_phone(search)
+        contacts = self.assistent.search_contacts(search)
 
-        if contacts_phones:
-            self.view.render_show_phone(
-                success=True, data={"contacts_phones": contacts_phones}
-            )
-        else:
-            self.view.render_show_phone(
-                success=False,
-                data={
-                    "error": "Contact not found",
-                    "status_code": 404,
-                    "search": search,
-                },
-            )
+        self.view.render_show_phone(success=True, data={"contacts": contacts})
 
     def cmd_show_all(self, _args: list[str]) -> None:
         records = self.assistent.get_all_contacts()
