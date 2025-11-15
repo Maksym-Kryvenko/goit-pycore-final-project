@@ -1,19 +1,29 @@
 # GoIT PyCore Final Project: Personal Assistant CLI Application
 
 ## Overview
-TBD
+This is a command-line personal assistant designed to help users manage contacts and notes efficiently. It supports storing detailed contact information, tracking birthdays, validating input, and organizing notes with tags and links. The project demonstrates practical use of object-oriented programming, modular architecture, and CLI interaction.
 
 ## Features
-TBD
+- CLI interface with command parsing and error handling
+- Persistent data storage using pickle serialization
+- Input validation for names, phone numbers, emails and birthdays
+- Birthday tracking and filtering
+- Modular design with separation of models, services, and CLI logic
 
 ## Requirements
-TBD
+- Python 3.10+
+- OS: Windows, macOS, or Linux
+- Dependencies listed in requirements.txt
 
 ## Installation
-TBD
+copy files into any directory
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
 
 ## Usage
-TBD
+Once launched, the assistant accepts commands via the CLI. You can manage contacts and notes using commands like add contact, add_note note, search contact, show-birthdays contact, etc.
 
 ### Working with Notes
 
@@ -59,10 +69,45 @@ recent = assistant.sort_by_updated_date(reverse=True)
 - `sort_by_updated_date(reverse=False)` - Sort by update date
 
 ### Available Commands
-TBD
+General commands:
+- help - Show available command list
+- hello - Greet the user
+- exit - Exit the application
+- quit - Exit the application
+
+Contact commands:
+- add - Add a contact with phone number or email
+- add-address - Add or edit contact's address
+- add-birthday - Add/change contact's birthday
+- change - Modify a contact number or email
+- del - Delete a contact
+- search - Search contact
+- phone - Show the contact's phones numbers
+- show-birthday - Show a contact's birthday
+- all - Show all contacts
+- birthdays - Show contact list with upcoming birthdays
+
+Note commands:
+- add_note - Add note
+- edit_note - Edit note
+- delete_note - Delete note
+- search_notes - Search note
+- all_notes - Show all notes
+- add_tag - Add tag to note
+- remove_tag - Remove tag from the note
+- get_tags - Get tags
+- link_contact - Create link from note to contact
+- unlink_contact - Delete link from note to contact
+- sort_created - Sort notes by creations date
+- sort_updated - Sort notes by updating date
 
 ### Usage Examples
-TBD
+> add John +38050-123-45-67
+> add John john@example.com
+> add-birthday John 15.05.1990
+> add note Presentation
+> search_notes Presentation
+> show-birthday John
 
 ## Project Structure
 ```
@@ -99,7 +144,7 @@ goit-pycore-final-project/
 ```
 
 ## Data Storage
-TBD
+All data is stored locally in .pkl files using Python’s pickle module. This ensures persistence between sessions without requiring a database.
 
 ## Configuration
 TBD
@@ -108,4 +153,8 @@ TBD
 TBD
 
 ## Authors
-TBD
+Maksym Kryvenko
+Yaroslav Zahoruiko
+Viacheslav Zabolotnyi
+Oleksandr Hrynenko
+Oleksii Kocherhin
