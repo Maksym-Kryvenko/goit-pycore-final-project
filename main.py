@@ -4,9 +4,6 @@ from src.services.assistent import Assistent
 from src.services.note_assistant import NoteAssistant
 from src.services.storage import load_data
 
-# from src.cli.parser import parse_input
-# from src.cli.commands import add_contact, change_contact, get_phone, get_all_contacts, add_birthday, show_birthday, birthdays
-
 
 def main():
     address_book, note_book = load_data()

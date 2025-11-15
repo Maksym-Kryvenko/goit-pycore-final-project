@@ -64,6 +64,7 @@ TBD
 ### Usage Examples
 TBD
 
+# TODO update structure with new console
 ## Project Structure
 ```
 goit-pycore-final-project/
