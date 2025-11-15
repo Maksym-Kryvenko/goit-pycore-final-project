@@ -45,9 +45,7 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(
-            f"{data.get('contact', data.get('record'))} was successful updated"
-        )
+        self._show(f"{data.get('contact', data.get('record'))} was successful updated")
 
     def render_show_phone(self, success: bool, data: dict) -> None:
         if not success:
@@ -65,13 +63,13 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(f"New {data.get('record')} was successful created")
+        self._show(f"New {data} was successful created")
 
     def render_add_address(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"New {data.get('record')} was successful created")
+        self._show(f"New {data.get('contact')} was successful created")
 
     def render_delete(self, success: bool, data: dict) -> None:
         if not success:
@@ -131,13 +129,17 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(f"{data.get('note_id')} was successful tagged with {data.get('tag')}")
+        self._show(
+            f"{data.get('note_id')} was successful tagged with {data.get('tag')}"
+        )
 
     def render_remove_tag(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"{data.get('note_id')} was successful untagged with {self._render_tags([data.get('tag')])}")
+        self._show(
+            f"{data.get('note_id')} was successful untagged with {self._render_tags([data.get('tag')])}"
+        )
 
     def render_get_tags(self, success: bool, data: dict) -> None:
         if not success:
@@ -149,25 +151,33 @@ class ConsoleView(View):
         if not success:
             return self.render_error(data)
 
-        self._show(f"{data.get('note_id')} was successful linked to {data.get('contact_id')}")
+        self._show(
+            f"{data.get('note_id')} was successful linked to {data.get('contact_id')}"
+        )
 
     def render_unlink_contact(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"{data.get('note_id')} was successful unlinked from {data.get('contact_id')}")
+        self._show(
+            f"{data.get('note_id')} was successful unlinked from {data.get('contact_id')}"
+        )
 
     def render_sort_created(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"Notes sorted by created date:\n{self._render_notes(data.get('notes'))}")
+        self._show(
+            f"Notes sorted by created date:\n{self._render_notes(data.get('notes'))}"
+        )
 
     def render_sort_updated(self, success: bool, data: dict) -> None:
         if not success:
             return self.render_error(data)
 
-        self._show(f"Notes sorted by updated date:\n{self._render_notes(data.get('notes'))}")
+        self._show(
+            f"Notes sorted by updated date:\n{self._render_notes(data.get('notes'))}"
+        )
 
     def render_all_notes(self, success: bool, data: dict) -> None:
         if not success:
@@ -200,8 +210,9 @@ class ConsoleView(View):
                 email: {self._render_emails(contact.emails)};
                 address: {contact.address or "No address"};
                 birthday: {contact.birthday or "No birthday"};
-            """).strip()
-    
+            """
+        ).strip()
+
     def _render_emails(self, emails: list) -> str:
         return ", ".join([email.value for email in emails]) or "No emails"
 
@@ -212,13 +223,15 @@ class ConsoleView(View):
         return "\n".join([self._render_note(note) for note in notes]) or "No notes"
 
     def _render_note(self, note: Note) -> str:
-        return textwrap.dedent(f"""
+        return textwrap.dedent(
+            f"""
             note id: {note.id};
             note content: {note.content};
             note tags: {self._render_tags(note.tags)};
             contact: {note.contact.name if note.contact else 'No contact'}
-        """).strip()
-        
+        """
+        ).strip()
+
     def _render_tags(self, tags: list) -> str:
         return ", ".join([self._render_tag(tag) for tag in tags]) or "No tags"
 

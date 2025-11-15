@@ -61,7 +61,7 @@ class AppController:
             else:
                 self.view.invalid_command()
 
-    def cmd_hello(self):
+    def cmd_hello(self, _):
         self.view.render_hello()
 
     def cmd_help(self, _):
@@ -94,8 +94,8 @@ class AppController:
     def cmd_add_address(self, args):
         if len(args) < 2:
             raise ValueError("Usage: add-address [name] [address]")
-        name, address, *_ = args
-        contact = self.assistent.add_address(name, address)
+        name, *address = args
+        contact = self.assistent.add_address(name, " ".join(address))
         self.view.render_add_address(success=True, data={"contact": contact})
 
     def cmd_delete(self, args):
@@ -189,7 +189,9 @@ class AppController:
         self.view.render_search_notes(success=True, data={"notes": notes})
 
     def cmd_all_notes(self, _args):
-        self.view.render_all_notes(success=True, data={"notes": self.note_assistent.get_all_notes()})
+        self.view.render_all_notes(
+            success=True, data={"notes": self.note_assistent.get_all_notes()}
+        )
 
     def cmd_add_tag(self, args):
         if len(args) < 2:
@@ -217,7 +219,9 @@ class AppController:
             raise ValueError("Usage: link-contact [note_id] [contact_id]")
         note_id, contact_id, *_ = args
         self.note_assistent.link_note_to_contact(note_id, contact_id)
-        self.view.render_link_contact(success=True, data={"note_id": note_id, "contact_id": contact_id})
+        self.view.render_link_contact(
+            success=True, data={"note_id": note_id, "contact_id": contact_id}
+        )
 
     def cmd_unlink_contact(self, args):
         if len(args) < 1:

@@ -30,7 +30,7 @@ class AddressBook(UserDict):
             raise ValueError(f"Contact with name '{name}' not found")
 
         field_map = {
-            "name": Name,
+            "user_name": Name,
             "phone": Phone,
             "email": Email,
             "address": Address,
@@ -38,6 +38,7 @@ class AddressBook(UserDict):
         }
 
         for key, value in kwargs.items():
+            key = "name" if key == "user_name" else key
             if key in field_map and hasattr(contact, key):
                 setattr(contact, key, field_map[key](value))
             elif hasattr(contact, key):

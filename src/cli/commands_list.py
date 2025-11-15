@@ -19,7 +19,7 @@ def print_help():
         "add-birthday": "Add/change contact's birthday",  # COMPLETE
         "show-birthday": "Show a contact's birthday",  # COMPLETE
         "birthdays": "Sow upcoming birthdays",  # COMPLETE
-        "search": "Search for a contact",  # COMPLETE
+        "search": "Search for a contact",  # DO WE NEED THIS?
         "add-address": "Add or edit contact's address",  # COMPLETE
         "rename": "Rename existing contact",  # WIP
         "delete": "Delete a contact",  # COMPLETE

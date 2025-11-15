@@ -58,7 +58,7 @@ class Assistent:
             raise ValueError("Contact not found, please check the name")
         if self.address_book.find(new_name):
             raise ValueError(f"Contact with name {new_name} already exists.")
-        self.address_book.update_contact(name, name=new_name)
+        self.address_book.update_contact(name, user_name=new_name)
 
         return record
 
@@ -85,7 +85,6 @@ class Assistent:
         else:
             self.address_book.remove_contact(name)
         return record
-
 
     def get_phone(self, name: str) -> str:
         contacts = self.address_book.search_contacts(name)
