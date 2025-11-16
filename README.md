@@ -107,8 +107,6 @@ goit-pycore-final-project/
     │   ├── duplication_error.py
     │   ├── not_found_error.py
     │   └── validation_error.py
-    ├── helpers/
-    │   └── is_birthday_within_next_days.py  # Birthday calculations
     ├── models/                # Domain models (contacts and notes)
     │   ├── __init__.py
     │   ├── address_book.py
@@ -123,6 +121,7 @@ goit-pycore-final-project/
     │   └── storage.py         # Pickle save/load helpers
     ├── utils/
     │   ├── __init__.py
+    │   ├── is_birthday_within_next_days.py  # Birthday calculations
     │   └── validators.py      # Validation utilities for fields
     └── view/                  # CLI views and rendering
         ├── __init__.py

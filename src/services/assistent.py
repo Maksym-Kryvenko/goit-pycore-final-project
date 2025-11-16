@@ -1,5 +1,5 @@
 from src.errors import DuplicationError, NotFoundError
-from src.helpers.is_birthday_within_next_days import congratulation_date
+from src.utils.is_birthday_within_next_days import congratulation_date
 from src.models import AddressBook
 from src.models.contact import Contact
 from src.services.storage import save_pkl_book

@@ -123,15 +123,14 @@ NOTE_COMMANDS = {
     },
     "link-contact": {
         "description": "Link note to a contact",
-        "example": "link-contact <note_id> <contact_id>",
+        "example": "link-contact <contact_id> <note_id>",
         "second_arg_contact_name": True,
         "third_arg_note_id": True,
     },
     "unlink-contact": {
         "description": "Unlink note from a contact",
         "example": "unlink-contact <note_id>",
-        "second_arg_contact_name": True,
-        "third_arg_note_id": True,
+        "second_arg_note_id": True,
     },
     "sort-created": {
         "description": "Sort notes by created date",

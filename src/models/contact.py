@@ -1,4 +1,4 @@
-from src.helpers.is_birthday_within_next_days import is_birthday_within_next_days
+from src.utils.is_birthday_within_next_days import is_birthday_within_next_days
 from .fields import Name, Phone, Email, Address, Birthday
 
 
