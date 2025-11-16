@@ -1,17 +1,17 @@
 from prompt_toolkit.completion import Completer, Completion
-from src.view.console.commands_list import COMMANDS
+from src.config import COMMANDS
 from typing import List
 from src.models import Contact, Note
 
 
-class AddressBookCompleter(Completer):
+class ConsoleCompleter(Completer):
     def __init__(self, contacts: List[Contact] = [], notes: List[Note] = []):
         self.contacts: List[Contact] = contacts
         self.notes: List[Note] = notes
         self.commands = {
-            cmd: desc for cmd, desc in COMMANDS.items() 
-            if cmd and not cmd.startswith(" ") and not cmd.endswith(":")
+            cmd: meta['description'] for cmd, meta in COMMANDS.items()  
         }
+        self.command_settings = COMMANDS
 
     def update_data(self, contacts: List[Contact] = None, notes: List[Note] = None):
         if contacts is not None:
@@ -48,34 +48,21 @@ class AddressBookCompleter(Completer):
 
         # Second word and beyond - context-aware completion
         command = parts[0].lower()
-
-        # Commands that need contact names
-        second_arg_contact_commands = {
-            "phone", "show-birthday", "add-birthday", "add-address",
-            "rename", "delete", "change", "link-contact", "add", "search"
-        }
-
-        # Commands that need note IDs
-        second_arg_note_id_commands = {
-            "edit-note", "delete-note", "add-tag", "remove-tag",
-            "get-tags", "link-contact", "unlink-contact", "search-notes", "add-tag", "remove-tag"
-        }
-
-        # Second word completion (after command + space, or command + partial word)
-        if len(parts) == 2 and not is_after_space or (len(parts) == 1 and is_after_space):
-            if command in second_arg_contact_commands:
-                yield from self.second_word_completions_contact(current_word, start_position)
-            elif command in second_arg_note_id_commands:
-                yield from self.second_word_completions_note_id(current_word, start_position)
-
-        # Third word completion (for commands like add-tag note_id tag)
-        if len(parts) == 3 and not is_after_space or (len(parts) == 2 and is_after_space):
-            if command in {"link-contact", "unlink-contact"}:
-                yield from self.third_word_completions_note_id(current_word, start_position)
-        
+        if command in self.command_settings:
+            if len(parts) == 2 and not is_after_space or (len(parts) == 1 and is_after_space):
+                if self.command_settings[command].get("second_arg_contact_name"):
+                    yield from self.search_in_contacts_by_name(current_word, start_position)
+                elif self.command_settings[command].get("second_arg_note_id"):
+                    yield from self.search_in_notes_by_id(current_word, start_position)
+            if len(parts) == 3 and not is_after_space or (len(parts) == 2 and is_after_space):
+                if self.command_settings[command].get("third_arg_note_id"):
+                    yield from self.search_in_notes_by_id(current_word, start_position)
+                elif self.command_settings[command].get("third_arg_tag_name"):
+                    note_id = parts[1]
+                    yield from self.search_in_tags_by_name(current_word, start_position, note_id)
 
 
-    def empty_word_completions(self, document):
+    def empty_word_completions(self, _document):
         """Show all commands when no input"""
         for cmd, meta in self.commands.items():
             yield Completion(
@@ -98,7 +85,7 @@ class AddressBookCompleter(Completer):
                     display_meta=meta
                 )
 
-    def second_word_completions_contact(self, current_word: str, start_position: int):
+    def search_in_contacts_by_name(self, current_word: str, start_position: int):
         """Complete with contact names"""
         for contact in self.contacts:
             contact_name = str(contact.name).lower()
@@ -108,19 +95,8 @@ class AddressBookCompleter(Completer):
                     start_position=start_position,
                     display_meta=f"Contact: {contact_name}"
                 )
-    
-    def second_word_completions_note_id(self, current_word: str, start_position: int):
-        """Complete with note IDs"""
-        for note in self.notes:
-            note_id_lower = note.id.lower()
-            if not current_word or note_id_lower.startswith(current_word):
-                yield Completion(
-                    note.id,
-                    start_position=start_position,
-                    display_meta=f"Note ID: {note.id}"
-                )
-    
-    def third_word_completions_note_id(self, current_word: str, start_position: int):
+
+    def search_in_notes_by_id(self, current_word: str, start_position: int):
         """Complete third word with note IDs (for commands like add-tag note_id tag)"""
         for note in self.notes:
             note_id_lower = note.id.lower()
@@ -129,4 +105,18 @@ class AddressBookCompleter(Completer):
                     note.id,
                     start_position=start_position,
                     display_meta=f"Note ID: {note.id}"
+                )
+
+
+    def search_in_tags_by_name(self, current_word: str, start_position: int, note_id: str):
+        """Complete third word with tag names"""
+        note = next((note for note in self.notes if note.id == note_id), None)
+        tags = note.tags if note else []
+        for tag in tags:
+            tag_name_lower = str(tag).lower()
+            if not current_word or tag_name_lower.startswith(current_word):
+                yield Completion(
+                    str(tag),
+                    start_position=start_position,
+                    display_meta=f"Tag: {str(tag)}"
                 )

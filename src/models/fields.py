@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from src.errors import ValidationError
 from src.utils.validators import check_name, check_email, check_phone, check_date
 
 
@@ -36,7 +37,7 @@ class Name(Field):
     @value.setter
     def value(self, new_value: str):
         if not check_name(new_value):
-            raise ValueError("Name cannot be empty and must not contain digits")
+            raise ValidationError("Name cannot be empty and must not contain digits")
         self._value = new_value.strip()
 
 
@@ -56,7 +57,7 @@ class Phone(Field):
             self._value = None
         else:
             if not check_phone(new_value):
-                raise ValueError("Phone must be +380XX-XXX-XX-XX format")
+                raise ValidationError("Phone must be +380XX-XXX-XX-XX format")
             self._value = self.__normalize_phone(new_value)
 
     def __normalize_phone(self, phone_number: str) -> str:
@@ -93,7 +94,7 @@ class Email(Field):
             self._value = None
         else:
             if not check_email(new_value):
-                raise ValueError("Invalid email format")
+                raise ValidationError("Invalid email format")
             self._value = new_value.strip().lower()
 
 
@@ -131,7 +132,7 @@ class Birthday(Field):
             self._value = None
         else:
             if not check_date(new_value):
-                raise ValueError(
+                raise ValidationError(
                     "Birthday must be in format DD.MM.YYYY and cannot be today or in the future"
                 )
             self._value = datetime.strptime(new_value, "%d.%m.%Y").date()

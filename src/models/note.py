@@ -1,5 +1,6 @@
 from datetime import datetime
 import uuid
+from src.errors import NotFoundError
 from src.models.fields import NoteText, NoteTag
 from src.models.address_book import AddressBook
 
@@ -18,7 +19,7 @@ class Note:
         self.content = NoteText(content) if content else NoteText("")
         self.contact = contact
         self.tags = [NoteTag(tag) for tag in tags] if tags else []
-        self.created_at = Da
+        self.created_at = datetime.now()
         self.updated_at = datetime.now()
 
     def add_tags(self, *tags: str) -> None:
@@ -42,7 +43,7 @@ class Note:
         if _contact:
             self.contact = _contact
         else:
-            raise ValueError("Contact not found")
+            raise NotFoundError("Contact not found")
         self.updated_at = datetime.now()
 
     def unlink_contact(self) -> None:

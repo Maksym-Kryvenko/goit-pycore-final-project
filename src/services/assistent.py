@@ -1,3 +1,4 @@
+from src.errors import DuplicationError, NotFoundError
 from src.helpers.is_birthday_within_next_days import congratulation_date
 from src.models import AddressBook
 from src.models.contact import Contact
@@ -36,25 +37,25 @@ class Assistent:
 
         return record
 
-    def change_contact(self, name: str, phone_old: str, phone_new: str) -> Contact:
+    def change_contact(self, name: str, old_value: str, new_value: str) -> Contact:
         record = self._find_contact(name)
 
-        if "@" in phone_old:
-            record_email = record.find_email(phone_old)
+        if "@" in old_value:
+            record_email = record.find_email(old_value)
             if record_email is None:
-                raise ValueError(f"Email {phone_old} for contact {name} not found.")
+                raise NotFoundError(f"Email {old_value} for contact {name} not found.")
 
-            record.remove_email(phone_old)
-            record.add_email(phone_new)
+            record.add_email(new_value)
+            record.remove_email(old_value)
 
             return record
         else:
-            record_phone = record.find_phone(phone_old)
+            record_phone = record.find_phone(old_value)
             if record_phone is None:
-                raise ValueError(f"Phone {phone_old} for contact {name} not found.")
+                raise NotFoundError(f"Phone {old_value} for contact {name} not found.")
 
-            record.remove_phone(phone_old)
-            record.add_phone(phone_new)
+            record.add_phone(new_value)
+            record.remove_phone(old_value)
 
             return record
 
@@ -62,7 +63,7 @@ class Assistent:
         record = self._find_contact(name)
 
         if self.address_book.find(new_name):
-            raise ValueError(f"Contact with name {new_name} already exists.")
+            raise DuplicationError(f"Contact with name {new_name} already exists.")
         self.address_book.update_contact(name, user_name=new_name)
 
         return record
@@ -108,5 +109,5 @@ class Assistent:
     def _find_contact(self, name: str) -> Contact:
         record = self.address_book.find(name)
         if record is None:
-            raise ValueError("Contact not found, please check the name")
+            raise NotFoundError("Contact not found, please check the name")
         return record

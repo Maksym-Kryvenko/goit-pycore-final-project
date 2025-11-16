@@ -1,5 +1,7 @@
 from typing import List
 from collections import UserDict
+
+from src.errors import DuplicationError, NotFoundError
 from .contact import Contact
 from .fields import Name, Phone, Email, Address, Birthday
 
@@ -13,20 +15,20 @@ class AddressBook(UserDict):
     def add_contact(self, contact: Contact) -> None:
         """Add a new contact to the address book."""
         if contact.name.value in self.data:
-            raise ValueError(f"Contact with name '{contact.name.value}' already exists")
+            raise DuplicationError(f"Contact with name '{contact.name.value}' already exists")
         self.data[contact.name.value] = contact
 
     def remove_contact(self, name: str) -> None:
         """Remove a contact from the address book."""
         if name not in self.data:
-            raise ValueError(f"Contact with name '{name}' not found")
+            raise NotFoundError(f"Contact with name '{name}' not found")
         del self.data[name]
 
     def update_contact(self, name: str, **kwargs) -> None:
         """Update contact fields with proper Field validation."""
         contact = self.data.get(name)
         if not contact:
-            raise ValueError(f"Contact with name '{name}' not found")
+            raise NotFoundError(f"Contact with name '{name}' not found")
 
         field_map = {
             "user_name": Name,

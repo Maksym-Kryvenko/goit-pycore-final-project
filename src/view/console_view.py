@@ -1,44 +1,39 @@
 from prompt_toolkit.history import InMemoryHistory
+from prompt_toolkit import prompt
 from rich.console import Console
-from src.controllers.app_controller import AppController
+from typing import List
 from src.models import Contact, Note
-from src.view.console.completer import AddressBookCompleter
+from src.view.console.completer import ConsoleCompleter
 from src.view.console.contacts import print_contacts, print_contact_card, print_upcoming_birthdays, print_contacts_birthdays, print_contacts_phones
 from src.view.console.notes import print_notes, print_note_card
 from src.view.console.tags import print_tags
+from src.view.console import print_help, dynamic_bottom_toolbar, style
 from src.view.view import View
-from src.view.console.commands_list import print_help
-from typing import List
-from prompt_toolkit import prompt
 
 class ConsoleView(View):
     def __init__(self):
         super().__init__()
-        self.controller = None
-        self.contacts = []
-        self.notes = []
         self.console = Console()
-        self.completer = AddressBookCompleter()
+        self.completer = ConsoleCompleter()
         self.history = InMemoryHistory()
 
 
-    def set_controller(self, controller: AppController) -> None:
-        self.controller = controller
-
     def update_data(self, contacts: List[Contact] = None, notes: List[Note] = None) -> None:
-        if contacts is not None:
-            self.contacts = contacts
-        if notes is not None:
-            self.notes = notes
-        
-        self.completer.update_data(contacts=self.contacts, notes=self.notes)
+        self.completer.update_data(contacts=contacts, notes=notes)
 
     def prompt(self, contacts: List[Contact], notes: List[Note]) -> str:
-        user_input = prompt("> ", completer=self.completer, complete_while_typing=True, history=self.history)
+        user_input = prompt(
+            "> ",
+            completer=self.completer,
+            complete_while_typing=True,
+            history=self.history,
+            style=style,
+            bottom_toolbar=dynamic_bottom_toolbar,
+        )
         return user_input.strip()
 
     def render_welcome(self) -> None:
-        print("Welcome to the assistant bot!")
+        self._show("Welcome to the assistant bot!")
 
     def render_error(self, data: dict) -> None:
         if data.get("error"):
@@ -53,7 +48,7 @@ class ConsoleView(View):
         self._show("Invalid command. Type 'help'.")
 
     def render_help(self) -> None:
-        print_help()
+        print_help(self.console)
 
     def render_hello(self) -> None:
         self._show("Welcome to the assistant bot!")
@@ -226,7 +221,7 @@ class ConsoleView(View):
 
     def _show(self, message: str = ""):
         if message:
-            print(message)
+            self.console.print(message)
 
     def _show_error(self, message: str) -> None:
         self._show(f"Error: {message}")
