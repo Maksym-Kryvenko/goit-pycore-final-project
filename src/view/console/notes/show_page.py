@@ -4,6 +4,10 @@ from src.models import Note
 
 
 def print_note_card(console: Console, note: Note):
+    if note is None:
+        console.print("[red]Error: Note not found[/red]")
+        return
+
     lines = [
         f"[bold]Content:[/bold] {_content(note.content)}",
         f"[bold]Tags:[/bold] {_tags(note.tags)}",

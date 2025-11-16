@@ -67,15 +67,20 @@ class Phone(Field):
 
         Return: str The normalized phone number.
         """
-        phone_number = phone_number.strip().replace(" ", "")
-        phone_number = phone_number[phone_number.index("0") :]
-        found_number = re.fullmatch(
-            r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})",
-            phone_number,
-        )
-        found_number = f"+38{found_number[0]}"
-        _ = found_number[12]  # Ensure if the string is long enough
-        return found_number
+        try:
+            phone_number = phone_number.strip().replace(" ", "")
+            phone_number = phone_number[phone_number.index("0") :]
+            found_number = re.fullmatch(
+                r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})",
+                phone_number,
+            )
+            if not found_number:
+                raise ValidationError("Phone must be +380XX-XXX-XX-XX format")
+            found_number = f"+38{found_number[0]}"
+            _ = found_number[12]  # Ensure if the string is long enough
+            return found_number
+        except (ValueError, IndexError) as e:
+            raise ValidationError("Phone must be +380XX-XXX-XX-XX format") from e
 
 
 class Email(Field):
@@ -153,7 +158,11 @@ class NoteText(Field):
 
     @value.setter
     def value(self, new_value: str):
-        self._value = new_value.strip() if new_value else None
+        # Allow empty strings, just strip whitespace
+        if new_value is None:
+            self._value = None
+        else:
+            self._value = new_value.strip()
 
 
 class NoteTag(Field):

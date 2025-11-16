@@ -32,8 +32,19 @@ class AddressBook(UserDict):
         if not contact:
             raise NotFoundError(f"Contact with name '{name}' not found")
 
+        # Handle name change separately
+        if "user_name" in kwargs:
+            new_name = kwargs["user_name"]
+            if new_name != name:
+                # Update the contact's name field
+                contact.name = Name(new_name)
+                # Move to new key in dictionary
+                del self.data[name]
+                self.data[new_name] = contact
+            # Remove from kwargs to avoid processing again
+            kwargs = {k: v for k, v in kwargs.items() if k != "user_name"}
+
         field_map = {
-            "user_name": Name,
             "phone": Phone,
             "email": Email,
             "address": Address,
@@ -41,7 +52,6 @@ class AddressBook(UserDict):
         }
 
         for key, value in kwargs.items():
-            key = "name" if key == "user_name" else key
             if key in field_map and hasattr(contact, key):
                 setattr(contact, key, field_map[key](value))
             elif hasattr(contact, key):
@@ -59,13 +69,13 @@ class AddressBook(UserDict):
 
             # Search in phones
             for phone in contact.phones:
-                if query in phone.value.lower():
+                if query in phone.value:
                     results.append(contact)
                     break
             else:
                 # Search in emails (only if not found in phones)
                 for email in contact.emails:
-                    if query in email.value.lower():
+                    if query in email.value:
                         results.append(contact)
                         break
 

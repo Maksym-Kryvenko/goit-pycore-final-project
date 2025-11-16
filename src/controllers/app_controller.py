@@ -38,18 +38,17 @@ class AppController:
                 try:
                     handler(args)
                 except CommandError as exc:
-                    self.view.render_error(success=False, data={"error": str(exc)})
+                    self.view.render_error(data={"error": str(exc)})
                 except ValidationError as exc:
-                    self.view.render_error(success=False, data={"error": str(exc)})
+                    self.view.render_error(data={"error": str(exc)})
                 except NotFoundError as exc:
-                    self.view.render_error(success=False, data={"error": str(exc)})
+                    self.view.render_error(data={"error": str(exc)})
                 except DuplicationError as exc:
-                    self.view.render_error(success=False, data={"error": str(exc)})
+                    self.view.render_error(data={"error": str(exc)})
                 except Exception as exc:
                     # For unexpected exceptions, provide a generic message.
                     self.view.render_error(
-                        success=False,
-                        data={"error": f"An unexpected error occurred: {exc}"},
+                        data={"error": f"An unexpected error occurred: {exc}"}
                     )
             else:
                 self.view.invalid_command()
@@ -123,7 +122,11 @@ class AppController:
         record = self.assistent.add_birthday(name, birthday)
         self.view.render_add_birthday(
             success=True,
-            data={"name": record.name, "birthday": record.birthday},
+            data={
+                "contact": record,
+                "name": record.name.value,
+                "birthday": str(record.birthday),
+            },
         )
 
     def cmd_show_birthday(self, args: list[str]) -> None:
@@ -191,15 +194,20 @@ class AppController:
     def cmd_get_tags(self, args: list[str]) -> None:
         self.check_args(args, "get-tags", 1)
         note_id, *_ = args
-        tags = self.note_assistent.get_all_tags(note_id)
+        note = self.note_assistent.find_note(note_id)
+        if not note:
+            raise NotFoundError(f"Note with id '{note_id}' not found")
+        tags = note.tags if note.tags else []
         self.view.render_get_tags(success=True, data={"note_id": note_id, "tags": tags})
 
     def cmd_link_contact(self, args: list[str]) -> None:
         self.check_args(args, "link-contact", 2)
-        contact_id, note_id, *_ = args
+        note_id, contact_id, *_ = args
         self.note_assistent.link_note_to_contact(note_id, contact_id)
+        note = self.note_assistent.find_note(note_id)
         self.view.render_link_contact(
-            success=True, data={"note_id": note_id, "contact_id": contact_id}
+            success=True,
+            data={"note_id": note_id, "contact_id": contact_id, "note": note},
         )
 
     def cmd_unlink_contact(self, args: list[str]) -> None:
@@ -209,14 +217,16 @@ class AppController:
         self.view.render_unlink_contact(success=True, data={"note_id": note_id})
 
     def cmd_sort_created(self, args: list[str]) -> None:
-        self.check_args(args, "sort-created", 1)
-        reverse, *_ = args
+        reverse = False
+        if args and len(args) > 0:
+            reverse = args[0].lower() in ["true", "1", "yes", "desc", "reverse"]
         result = self.note_assistent.sort_by_created_date(reverse)
         self.view.render_sort_created(success=True, data={"notes": result})
 
     def cmd_sort_updated(self, args: list[str]) -> None:
-        self.check_args(args, "sort-updated", 1)
-        reverse, *_ = args
+        reverse = False
+        if args and len(args) > 0:
+            reverse = args[0].lower() in ["true", "1", "yes", "desc", "reverse"]
         result = self.note_assistent.sort_by_updated_date(reverse)
         self.view.render_sort_updated(success=True, data={"notes": result})
 
