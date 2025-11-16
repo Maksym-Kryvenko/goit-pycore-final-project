@@ -151,8 +151,8 @@ class AppController:
 
     def cmd_edit_note(self, args: list[str]) -> None:
         self.check_args(args, "edit-note", 2)
-        note_id, content, *_ = args
-        note = self.note_assistent.edit_note(note_id, content)
+        note_id, *content = args
+        note = self.note_assistent.edit_note(note_id, " ".join(content))
         self.view.render_edit_note(success=True, data={"note": note})
 
     def cmd_delete_note(self, args: list[str]) -> None:
