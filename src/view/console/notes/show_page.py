@@ -2,6 +2,7 @@ from rich.console import Console
 from rich.panel import Panel
 from src.models import Note
 
+
 def print_note_card(console: Console, note: Note):
     lines = [
         f"[bold]Content:[/bold] {_content(note.content)}",
@@ -10,7 +11,6 @@ def print_note_card(console: Console, note: Note):
     text = "\n".join(lines)
 
     console.print(Panel(text, title=f"Note: {note.id}", border_style="cyan"))
-
 
 
 def _content(content: str) -> str:

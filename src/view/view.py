@@ -106,7 +106,7 @@ class View(ABC):
     @abstractmethod
     def render_sort_updated(self, success: bool, data: dict) -> None:
         raise NotImplementedError("Subclasses must implement this method")
-    
+
     @abstractmethod
     def render_contacts(self, success: bool, data: dict) -> None:
         raise NotImplementedError("Subclasses must implement this method")

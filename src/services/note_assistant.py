@@ -1,4 +1,5 @@
 """Assistant for Note and NoteBook operations."""
+
 from typing import Optional
 from src.models import Note, NoteBook, AddressBook
 from src.services.storage import save_pkl_book

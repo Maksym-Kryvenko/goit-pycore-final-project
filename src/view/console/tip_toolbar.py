@@ -3,10 +3,13 @@ from prompt_toolkit.formatted_text import AnyFormattedText
 from prompt_toolkit.styles import Style
 from src.config import COMMANDS
 
-style = Style.from_dict({
-    "prompt": "fg:#00ffcc bold",
-    "bottom-toolbar": "fg:#666666 italic",
-})
+style = Style.from_dict(
+    {
+        "prompt": "fg:#00ffcc bold",
+        "bottom-toolbar": "fg:#666666 italic",
+    }
+)
+
 
 def dynamic_bottom_toolbar() -> AnyFormattedText:
     app = get_app()

@@ -4,20 +4,19 @@ from rich.console import Console
 from rich.align import Align
 from rich.box import ROUNDED
 
+
 def print_contacts(console: Console, contacts, search: str = None):
 
     # title = "Address Book" if not search else Align.left("Search results for: " + search)
     if not search:
         title = Panel(
-            "[bold cyan]Address Book[/bold cyan]",
-            border_style="cyan",
-            box=ROUNDED
+            "[bold cyan]Address Book[/bold cyan]", border_style="cyan", box=ROUNDED
         )
     else:
         title = Panel(
             Align.left(f"[bold yellow]Search results for:[/bold yellow] {search}"),
             border_style="yellow",
-            box=ROUNDED
+            box=ROUNDED,
         )
 
     table = Table(title=title, show_lines=True)
@@ -35,7 +34,7 @@ def print_contacts(console: Console, contacts, search: str = None):
             "[dim]-[/dim]",
             "[dim]-[/dim]",
             "[dim]-[/dim]",
-            "[dim]-[/dim]"
+            "[dim]-[/dim]",
         )
     else:
         for c in contacts:
@@ -46,7 +45,6 @@ def print_contacts(console: Console, contacts, search: str = None):
             table.add_row(str(c.name), emails, phones, addresse, birthday)
 
     console.print(table)
-
 
 
 def _phones(phones: list) -> str:

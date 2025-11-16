@@ -25,7 +25,6 @@ class NoteBook(UserDict):
         """Find a note by id."""
         return self.data.get(note_id)
 
-
     # TODO: add search by content
     def search_by_tags(self, *tags: str) -> list:
         """Search notes by one or multiple tags."""

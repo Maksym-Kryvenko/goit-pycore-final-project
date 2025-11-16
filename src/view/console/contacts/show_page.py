@@ -2,6 +2,7 @@ from rich.console import Console
 from rich.panel import Panel
 from src.models import Contact
 
+
 def print_contact_card(console: Console, contact: Contact):
     lines = [
         f"[bold]Emails:[/bold] {_emails(contact.emails)}",
@@ -12,7 +13,6 @@ def print_contact_card(console: Console, contact: Contact):
     text = "\n".join(lines)
 
     console.print(Panel(text, title=f"Contact: {contact.name}", border_style="cyan"))
-
 
 
 def _phones(phones: list) -> str:

@@ -15,7 +15,9 @@ class AddressBook(UserDict):
     def add_contact(self, contact: Contact) -> None:
         """Add a new contact to the address book."""
         if contact.name.value in self.data:
-            raise DuplicationError(f"Contact with name '{contact.name.value}' already exists")
+            raise DuplicationError(
+                f"Contact with name '{contact.name.value}' already exists"
+            )
         self.data[contact.name.value] = contact
 
     def remove_contact(self, name: str) -> None:

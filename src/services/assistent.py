@@ -12,7 +12,7 @@ class Assistent:
 
     def add_contact(self, name: str, value: str) -> tuple[str, Contact]:
         record = self.address_book.find(name)
-        
+
         if record is None:
             record = self._add_contact(name, value)
             return "created", record
@@ -86,12 +86,16 @@ class Assistent:
         self.address_book.remove_contact(name)
         return record
 
-
     def search_contacts(self, query: str) -> list[Contact]:
-        return sorted(self.address_book.search_contacts(query), key=lambda contact: str(contact.name))
+        return sorted(
+            self.address_book.search_contacts(query),
+            key=lambda contact: str(contact.name),
+        )
 
     def get_all_contacts(self) -> list[Contact]:
-        return sorted(self.address_book.data.values(), key=lambda contact: str(contact.name))
+        return sorted(
+            self.address_book.data.values(), key=lambda contact: str(contact.name)
+        )
 
     def show_birthday(self, name: str) -> str:
         contacts = self.search_contacts(name)
@@ -99,8 +103,18 @@ class Assistent:
         return contacts
 
     def birthdays(self) -> list[dict]:
-        contacts = list(filter(lambda contact: contact.is_birthday_next_week(), self.get_all_contacts()))
-        return [{ "contact": contact, "congratulation_date": congratulation_date(contact.birthday.value) } for contact in contacts]
+        contacts = list(
+            filter(
+                lambda contact: contact.is_birthday_next_week(), self.get_all_contacts()
+            )
+        )
+        return [
+            {
+                "contact": contact,
+                "congratulation_date": congratulation_date(contact.birthday.value),
+            }
+            for contact in contacts
+        ]
 
     def save_data(self) -> bool:
         save_pkl_book(self.address_book, DEFAULT_ADDRESSBOOK_FILENAME)

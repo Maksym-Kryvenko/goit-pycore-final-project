@@ -79,7 +79,7 @@ CONTACT_COMMANDS = {
         "description": "Rename existing contact",
         "example": "rename <name> <new_name>",
         "second_arg_contact_name": True,
-    }
+    },
 }
 NOTE_COMMANDS = {
     "add-note": {

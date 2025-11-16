@@ -22,13 +22,14 @@ class AppController:
             command_routes[command] = handler
         return command_routes
 
-
     def run(self) -> None:
         self.view.render_welcome()
         self.view.render_help_proposal()
         self._update_view_data()
         while self._running:
-            raw = self.view.prompt(self.assistent.get_all_contacts(), self.note_assistent.get_all_notes())
+            raw = self.view.prompt(
+                self.assistent.get_all_contacts(), self.note_assistent.get_all_notes()
+            )
             if not raw:
                 continue
             cmd, *args = raw.split()
@@ -46,7 +47,10 @@ class AppController:
                     self.view.render_error(success=False, data={"error": str(exc)})
                 except Exception as exc:
                     # For unexpected exceptions, provide a generic message.
-                    self.view.render_error(success=False, data={"error": f"An unexpected error occurred: {exc}"})
+                    self.view.render_error(
+                        success=False,
+                        data={"error": f"An unexpected error occurred: {exc}"},
+                    )
             else:
                 self.view.invalid_command()
 
@@ -74,7 +78,10 @@ class AppController:
         self.check_args(args, "rename", 2)
         name, new_name, *_ = args
         contact = self.assistent.rename_contact(name, new_name)
-        self.view.render_rename(success=True, data={"contact": contact, "old_name": name, "new_name": new_name})
+        self.view.render_rename(
+            success=True,
+            data={"contact": contact, "old_name": name, "new_name": new_name},
+        )
 
     def cmd_add_address(self, args: list[str]) -> None:
         self.check_args(args, "add-address", 2)
@@ -93,14 +100,18 @@ class AppController:
         self.check_args(args, "search", 1)
         query, *_ = args
         contacts = self.assistent.search_contacts(query)
-        self.view.render_contacts(success=True, data={"contacts": contacts, "search": query})
+        self.view.render_contacts(
+            success=True, data={"contacts": contacts, "search": query}
+        )
 
     def cmd_show_phone(self, args: list[str]) -> None:
         self.check_args(args, "phone", 1)
         search, *_ = args
         contacts = self.assistent.search_contacts(search)
 
-        self.view.render_show_phone(success=True, data={"contacts": contacts, "search": search})
+        self.view.render_show_phone(
+            success=True, data={"contacts": contacts, "search": search}
+        )
 
     def cmd_show_all(self, _args: list[str]) -> None:
         records = self.assistent.get_all_contacts()
@@ -222,7 +233,6 @@ class AppController:
                 success=False, data={"error": "Failed to save data", "status_code": 500}
             )
 
-
     def _update_view_data(self) -> None:
         contacts = list(self.assistent.get_all_contacts())
         notes = list(self.note_assistent.get_all_notes())
@@ -230,5 +240,7 @@ class AppController:
 
     def check_args(self, args: list[str], command: str, min_args: int = 1) -> bool:
         if len(args) < min_args:
-            raise CommandError(f"Usage: {COMMANDS[command]['example']}. Expected {min_args} arguments, got {len(args)}. Please check the command and try again.")
+            raise CommandError(
+                f"Usage: {COMMANDS[command]['example']}. Expected {min_args} arguments, got {len(args)}. Please check the command and try again."
+            )
         return True

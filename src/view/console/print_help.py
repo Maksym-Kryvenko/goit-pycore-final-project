@@ -3,6 +3,7 @@ from rich.table import Table
 from rich.box import ROUNDED
 from src.config import GENERAL_COMMANDS, CONTACT_COMMANDS, NOTE_COMMANDS
 
+
 def print_help(console: Console, title: str = "List of commands"):
     # Create table
     table = Table(
@@ -17,7 +18,7 @@ def print_help(console: Console, title: str = "List of commands"):
     for section_title, section_commands in [
         ("General Commands", GENERAL_COMMANDS),
         ("Contact Commands", CONTACT_COMMANDS),
-        ("Note Commands", NOTE_COMMANDS)
+        ("Note Commands", NOTE_COMMANDS),
     ]:
         table.add_section()
         table.add_row(f"[b yellow]{section_title}[/b yellow]", "", "")

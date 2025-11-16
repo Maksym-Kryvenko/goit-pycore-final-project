@@ -4,19 +4,16 @@ from rich.console import Console
 from rich.align import Align
 from rich.box import ROUNDED
 
+
 def print_tags(console: Console, tags, search: str = None):
 
     if not search:
-        title = Panel(
-            "[bold cyan]Tags[/bold cyan]",
-            border_style="cyan",
-            box=ROUNDED
-        )
+        title = Panel("[bold cyan]Tags[/bold cyan]", border_style="cyan", box=ROUNDED)
     else:
         title = Panel(
             Align.left(f"[bold yellow]Search results for:[/bold yellow] {search}"),
             border_style="yellow",
-            box=ROUNDED
+            box=ROUNDED,
         )
 
     table = Table(title=title, show_lines=True)
@@ -32,5 +29,3 @@ def print_tags(console: Console, tags, search: str = None):
         for t in tags:
             table.add_row(str(t.value))
     console.print(table)
-
-

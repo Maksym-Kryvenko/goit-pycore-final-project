@@ -40,14 +40,18 @@ class Contact:
     def remove_phone(self, phone_number):
         try:
             normalized = Phone(phone_number)
-            self.phones = [phone for phone in self.phones if phone.value != normalized.value]
+            self.phones = [
+                phone for phone in self.phones if phone.value != normalized.value
+            ]
         except ValueError:
             pass  # Invalid phone format, nothing to remove
 
     def remove_email(self, email_address):
         try:
             normalized_email = Email(email_address)
-            self.emails = [email for email in self.emails if email.value != normalized_email.value]
+            self.emails = [
+                email for email in self.emails if email.value != normalized_email.value
+            ]
         except ValueError:
             pass  # Invalid email format, nothing to remove
 
@@ -75,7 +79,9 @@ class Contact:
         return None
 
     def is_birthday_next_week(self) -> bool:
-        return self.birthday.value and is_birthday_within_next_days(self.birthday.value, 7)
+        return self.birthday.value and is_birthday_within_next_days(
+            self.birthday.value, 7
+        )
 
     def __str__(self) -> str:
         parts = [f"Name: {self.name.value}"]
@@ -101,4 +107,3 @@ class Contact:
         if not isinstance(other, Contact):
             return False
         return self.name.value == other.name.value
-

@@ -9,5 +9,5 @@ __all__ = [
     "print_contact_card",
     "print_upcoming_birthdays",
     "print_contacts_birthdays",
-    "print_contacts_phones"
+    "print_contacts_phones",
 ]

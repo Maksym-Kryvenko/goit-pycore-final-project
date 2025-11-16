@@ -3,11 +3,10 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.console import Console
 
+
 def print_upcoming_birthdays(console: Console, data: list[dict]):
     title = Panel(
-        "[bold cyan]Upcoming Birthdays[/bold cyan]",
-        border_style="cyan",
-        box=ROUNDED
+        "[bold cyan]Upcoming Birthdays[/bold cyan]", border_style="cyan", box=ROUNDED
     )
     table = Table(title=title, show_lines=True)
 
@@ -25,20 +24,28 @@ def print_upcoming_birthdays(console: Console, data: list[dict]):
             "[dim]-[/dim]",
             "[dim]-[/dim]",
             "[dim]-[/dim]",
-            "[dim]-[/dim]"
+            "[dim]-[/dim]",
         )
     else:
         for item in data:
-            contact = item.get('contact')
+            contact = item.get("contact")
             emails = _emails(contact.emails)
             phones = _phones(contact.phones)
             addresse = str(contact.address)
             birthday = str(contact.birthday)
-            congratulation_date = str(item.get('congratulation_date').strftime('%d.%m.%Y'))
-            table.add_row(str(contact.name), emails, phones, addresse, birthday, congratulation_date)
+            congratulation_date = str(
+                item.get("congratulation_date").strftime("%d.%m.%Y")
+            )
+            table.add_row(
+                str(contact.name),
+                emails,
+                phones,
+                addresse,
+                birthday,
+                congratulation_date,
+            )
 
     console.print(table)
-
 
 
 def _phones(phones: list) -> str:
