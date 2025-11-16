@@ -1,6 +1,6 @@
 from datetime import datetime
 import uuid
-from typing import Optional
+from src.errors import NotFoundError
 from src.models.fields import NoteText, NoteTag
 from src.models.address_book import AddressBook
 
@@ -14,7 +14,8 @@ class Note:
         contact: str = None,
         tags: tuple = None,
     ):
-        self.id = str(uuid.uuid4())
+        # Use shorter ID: first 8 hex characters of UUID
+        self.id = uuid.uuid4().hex[:8]
         self.content = NoteText(content) if content else NoteText("")
         self.contact = contact
         self.tags = [NoteTag(tag) for tag in tags] if tags else []
@@ -42,7 +43,7 @@ class Note:
         if _contact:
             self.contact = _contact
         else:
-            raise ValueError("Contact not found")
+            raise NotFoundError("Contact not found")
         self.updated_at = datetime.now()
 
     def unlink_contact(self) -> None:
@@ -68,7 +69,7 @@ class Note:
             if hasattr(self.content, "value")
             else str(self.content)[:30]
         )
-        return f"Note(id='{self.id[:8]}...', content='{content_str}...')"
+        return f"Note(id='{self.id}', content='{content_str}', contact='{self.contact}', tags='{self.tags}', created_at='{self.created_at}', updated_at='{self.updated_at}')"
 
     def __eq__(self, other) -> bool:
         """Compare notes by id."""

@@ -4,7 +4,7 @@ from src.models.notebook import NoteBook
 from src.config import DEFAULT_ADDRESSBOOK_FILENAME, DEFAULT_NOTEBOOK_FILENAME
 
 
-def _load_pkl_book(filename) -> object:
+def _load_pkl_object(filename, model: type) -> object:
     """
     Load a serialized book object from a pickle file.
 
@@ -23,7 +23,7 @@ def _load_pkl_book(filename) -> object:
             obj_book = pickle.load(f)
             return obj_book
     except FileNotFoundError:
-        return AddressBook()
+        return model()
 
 
 def load_data(
@@ -43,8 +43,8 @@ def load_data(
         tuple[AddressBook, NoteBook]: A tuple containing the loaded AddressBook
                                       and NoteBook objects.
     """
-    address_book = _load_pkl_book(addressbook_filename)
-    note_book = _load_pkl_book(notebook_filename)
+    address_book = _load_pkl_object(addressbook_filename, AddressBook)
+    note_book = _load_pkl_object(notebook_filename, NoteBook)
     return address_book, note_book
 
 

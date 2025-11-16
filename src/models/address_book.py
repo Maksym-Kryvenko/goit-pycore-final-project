@@ -1,8 +1,9 @@
 from typing import List
 from collections import UserDict
+
+from src.errors import DuplicationError, NotFoundError
 from .contact import Contact
 from .fields import Name, Phone, Email, Address, Birthday
-from datetime import datetime, timedelta
 
 
 class AddressBook(UserDict):
@@ -14,23 +15,36 @@ class AddressBook(UserDict):
     def add_contact(self, contact: Contact) -> None:
         """Add a new contact to the address book."""
         if contact.name.value in self.data:
-            raise ValueError(f"Contact with name '{contact.name.value}' already exists")
+            raise DuplicationError(
+                f"Contact with name '{contact.name.value}' already exists"
+            )
         self.data[contact.name.value] = contact
 
     def remove_contact(self, name: str) -> None:
         """Remove a contact from the address book."""
         if name not in self.data:
-            raise ValueError(f"Contact with name '{name}' not found")
+            raise NotFoundError(f"Contact with name '{name}' not found")
         del self.data[name]
 
     def update_contact(self, name: str, **kwargs) -> None:
         """Update contact fields with proper Field validation."""
         contact = self.data.get(name)
         if not contact:
-            raise ValueError(f"Contact with name '{name}' not found")
+            raise NotFoundError(f"Contact with name '{name}' not found")
+
+        # Handle name change separately
+        if "user_name" in kwargs:
+            new_name = kwargs["user_name"]
+            if new_name != name:
+                # Update the contact's name field
+                contact.name = Name(new_name)
+                # Move to new key in dictionary
+                del self.data[name]
+                self.data[new_name] = contact
+            # Remove from kwargs to avoid processing again
+            kwargs = {k: v for k, v in kwargs.items() if k != "user_name"}
 
         field_map = {
-            "name": Name,
             "phone": Phone,
             "email": Email,
             "address": Address,
@@ -55,13 +69,13 @@ class AddressBook(UserDict):
 
             # Search in phones
             for phone in contact.phones:
-                if query in phone.value.lower():
+                if query in phone.value:
                     results.append(contact)
                     break
             else:
                 # Search in emails (only if not found in phones)
                 for email in contact.emails:
-                    if query in email.value.lower():
+                    if query in email.value:
                         results.append(contact)
                         break
 
@@ -72,44 +86,6 @@ class AddressBook(UserDict):
             return self.data[name]
         else:
             return None
-
-    def get_upcoming_birthdays(self):
-        """Get a list of users with birthdays in the next 7 days."""
-        today = datetime.today().date()
-
-        upcoming_birthdays = []
-
-        for key, user in self.data.items():
-            selected_user = {}  # Dictionary to hold user info for congratulations
-            if user.birthday is not None and user.birthday.value is not None:
-                user_birthday = user.birthday.value
-                birthday_this_year = user_birthday.replace(
-                    year=today.year
-                )  # Birthday date for the current year
-                days_until_birthday = (birthday_this_year - today).days
-
-                if (
-                    0 <= days_until_birthday <= 7
-                ):  # Check if birthday is within the next 7 days
-                    selected_user["name"] = key
-                    if (
-                        birthday_this_year.weekday() < 5
-                    ):  # Check if birthday is on a weekday
-                        selected_user[
-                            "congratulation_date"
-                        ] = birthday_this_year.strftime("%d.%m.%Y")
-                    else:  # If birthday is on weekend, set congratulation date to next Monday
-                        days_to_monday = (
-                            7 - birthday_this_year.weekday()
-                        )  # Days to next Monday
-                        congratulation_date = birthday_this_year + timedelta(
-                            days=days_to_monday
-                        )  # Calculate next Monday
-                        selected_user[
-                            "congratulation_date"
-                        ] = congratulation_date.strftime("%d.%m.%Y")
-                    upcoming_birthdays.append(selected_user)
-        return upcoming_birthdays
 
     def __str__(self) -> str:
         if not self.data:

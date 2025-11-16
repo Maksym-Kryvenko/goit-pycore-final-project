@@ -27,10 +27,17 @@ def check_phone(phone: str) -> bool:
     Validate that the phone number is valid (Ukrainian format).
     """
     if phone is not None:
-        phone_number = phone.strip().replace(" ", "")
-        phone_number = phone_number[phone_number.index("0") :]
-        pattern = r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})"
-        return re.fullmatch(pattern, phone_number) is not None
+        try:
+            phone_number = phone.strip().replace(" ", "")
+            if "0" not in phone_number:
+                return False
+            phone_number = phone_number[phone_number.index("0") :]
+            pattern = (
+                r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})"
+            )
+            return re.fullmatch(pattern, phone_number) is not None
+        except (ValueError, IndexError):
+            return False
     else:
         return False
 

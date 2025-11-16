@@ -1,5 +1,8 @@
 from collections import UserDict
+
+from src.errors import NotFoundError
 from .note import Note
+from .fields import NoteTag
 
 
 class NoteBook(UserDict):
@@ -15,16 +18,16 @@ class NoteBook(UserDict):
     def delete_note(self, note_id: str) -> None:
         """Delete a note from the notebook."""
         if note_id not in self.data:
-            raise ValueError(f"Note with id '{note_id}' not found")
+            raise NotFoundError(f"Note with id '{note_id}' not found")
         del self.data[note_id]
 
     def find_note(self, note_id: str) -> Note:
         """Find a note by id."""
         return self.data.get(note_id)
 
+    # TODO: add search by content
     def search_by_tags(self, *tags: str) -> list:
         """Search notes by one or multiple tags."""
-        from .fields import NoteTag
         tags_objs = [NoteTag(tag) for tag in tags]
         results = []
         for note in self.data.values():
