@@ -13,145 +13,147 @@ This is a command-line personal assistant designed to help users manage contacts
 ## Requirements
 - Python 3.10+
 - OS: Windows, macOS, or Linux
-- Dependencies listed in requirements.txt
+- Dependencies listed in `requirements.txt`
 
 ## Installation
-copy files into any directory
+1. Clone or copy the project into any directory.
+2. Create and activate a virtual environment:
+
+```bash
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-
-## Usage
-Once launched, the assistant accepts commands via the CLI. You can manage contacts and notes using commands like add contact, add_note note, search contact, show-birthdays contact, etc.
-
-### Working with Notes
-
-#### Quick Start
-```python
-from src.services import NoteAssistant
-from src.models import Contact
-
-# Initialize Assistant
-assistant = NoteAssistant()
-
-# Add note
-my_note = assistant.add_note("Meeting notes", tags=("work", "important"))
-
-# Add tags
-assistant.add_tags_to_note(my_note.id, "project", "todo")
-
-# Link to contact (requires Contact object)
-contact = Contact("John Doe", phone="+38050-123-45-67")
-assistant.link_note_to_contact(my_note.id, contact)
-
-# Search
-work_notes = assistant.search_by_tags("work")
-john_notes = assistant.search_by_contact("John Doe")
-
-# Sort
-recent = assistant.sort_by_updated_date(reverse=True)
 ```
 
-#### Available Note Operations
-- `add_note(content, contact=None, tags=None)` - Add new note (contact must be Contact object)
-- `delete_note(note_id)` - Delete note
-- `find_note(note_id)` - Find note by ID
-- `add_tags_to_note(note_id, *tags)` - Add tags
-- `remove_tag_from_note(note_id, tag)` - Remove tag
-- `link_note_to_contact(note_id, contact)` - Link to contact (contact must be Contact object)
-- `unlink_note_from_contact(note_id)` - Unlink from contact
-- `search_by_tags(*tags)` - Search by tags
-- `search_by_contact(contact_name)` - Search by contact name (accepts string)
-- `get_all_notes()` - Get all notes
-- `get_all_tags()` - Get all unique tags
-- `sort_by_created_date(reverse=False)` - Sort by creation date
-- `sort_by_updated_date(reverse=False)` - Sort by update date
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the application:
+
+```bash
+python main.py
+```
+
+## Usage
+Once launched, the assistant accepts commands via an interactive CLI with autocompletion and a helpful toolbar.  
+You can manage contacts and notes using commands like `add`, `add-note`, `search`, `birthdays`, `search-notes`, etc.
 
 ### Available Commands
-General commands:
-- help - Show available command list
-- hello - Greet the user
-- exit - Exit the application
-- quit - Exit the application
+**General commands**
+- `hello` – Greet the user.
+- `help` – Show the list of commands in the console.
+- `exit`, `quit` – Save data and exit the application.
 
-Contact commands:
-- add - Add a contact with phone number or email
-- add-address - Add or edit contact's address
-- add-birthday - Add/change contact's birthday
-- change - Modify a contact number or email
-- del - Delete a contact
-- search - Search contact
-- phone - Show the contact's phones numbers
-- show-birthday - Show a contact's birthday
-- all - Show all contacts
-- birthdays - Show contact list with upcoming birthdays
+**Contact commands**
+- `add <name> <phone/email>` – Add a contact with phone number or email.
+- `change <name> <old_phone/email> <new_phone/email>` – Modify a contact phone or email.
+- `rename <name> <new_name>` – Rename an existing contact.
+- `delete <name>` – Delete a contact.
+- `add-address <name> <address>` – Add or edit contact's address.
+- `add-birthday <name> <dd.mm.yyyy>` – Add or change a contact's birthday.
+- `show-birthday <name>` – Show a contact's birthday.
+- `phone <name>` – Show the contact's phone numbers.
+- `all` – Show all contacts.
+- `search <query>` – Search contacts by name, phone, or email.
+- `birthdays` – Show contacts with upcoming birthdays (within configured days).
 
-Note commands:
-- add_note - Add note
-- edit_note - Edit note
-- delete_note - Delete note
-- search_notes - Search note
-- all_notes - Show all notes
-- add_tag - Add tag to note
-- remove_tag - Remove tag from the note
-- get_tags - Get tags
-- link_contact - Create link from note to contact
-- unlink_contact - Delete link from note to contact
-- sort_created - Sort notes by creations date
-- sort_updated - Sort notes by updating date
+**Note commands**
+- `add-note <text>` – Add a note.
+- `edit-note <note_id> <text>` – Edit a note.
+- `delete-note <note_id>` – Delete a note.
+- `search-notes <query>` – Search notes by tags or contact name.
+- `all-notes` – Show all notes.
+- `add-tag <note_id> <tag>` – Add a tag to a note.
+- `remove-tag <note_id> <tag>` – Remove a tag from a note.
+- `get-tags <note_id>` – Show tags for a specific note.
+- `link-contact <note_id> <contact_name>` – Link a note to a contact.
+- `unlink-contact <note_id>` – Unlink a note from a contact.
+- `sort-created [desc]` – Sort notes by creation date (optional `desc`/`true`/`yes` for reverse).
+- `sort-updated [desc]` – Sort notes by last update date (optional `desc`/`true`/`yes` for reverse).
 
 ### Usage Examples
+```text
 > add John +38050-123-45-67
 > add John john@example.com
 > add-birthday John 15.05.1990
-> add note Presentation
-> search_notes Presentation
+> add-note Presentation
+> search-notes Presentation
 > show-birthday John
+> birthdays
+> all-notes
+```
 
-# TODO update structure with new console
 ## Project Structure
-```
+```text
 goit-pycore-final-project/
-├── src/
-│   ├── __init__.py
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── fields.py          # Field, Name, Phone, Birthday
-│   │   ├── contact.py         # Contact class # TODO (see contact.py)
-│   │   └── address_book.py    # AddressBook class # TODO
-│   ├── services/
-│   │   ├── __init__.py
-│   │   ├── storage.py         # save_data, load_data
-│   │   └── contact_service.py # Business logic for contacts # TODO
-│   ├── cli/
-│   │   ├── __init__.py
-│   │   ├── commands.py        # Command functions (add_contact, change_phone, etc.) # TODO
-│   │   ├── parser.py          # parse_input function # TODO
-│   │   └── interface.py       # main() function and user interaction # TODO
-│   └── utils/
-│       ├── __init__.py
-│       ├── decorators.py      # input_error decorator # TODO
-│       └── validators.py      # Validation utilities
-├── data/                      # For storing .pkl files
-│   └── .gitkeep
-├── logs/                      # Application logs
-│   └── .gitkeep
-├── main.py                    # Entry point (minimal)
-├── requirements.txt
-├── .gitignore
-├── README.md
-└── config.py                  # Configuration constants
-```
+├── data/                      # Pickle storage for contacts and notes
+│   ├── addressbook.pkl
+│   └── notebook.pkl
+├── logs/                      # Application logs (reserved, can be extended)
+├── main.py                    # Entry point: initializes CLI, controller, and view
+├── requirements.txt           # Project dependencies
+├── README.md                  # Project documentation
+└── src/
+    ├── __init__.py
+    ├── config.py              # Command registry and configuration constants
+    ├── controllers/
+    │   ├── __init__.py
+    │   └── app_controller.py  # Application controller, command dispatch and orchestration
+    ├── errors/                # Custom exception types
+    │   ├── __init__.py
+    │   ├── command_error.py
+    │   ├── duplication_error.py
+    │   ├── not_found_error.py
+    │   └── validation_error.py
+    ├── helpers/
+    │   └── is_birthday_within_next_days.py  # Birthday calculations
+    ├── models/                # Domain models (contacts and notes)
+    │   ├── __init__.py
+    │   ├── address_book.py
+    │   ├── contact.py
+    │   ├── fields.py
+    │   ├── note.py
+    │   └── notebook.py
+    ├── services/              # Business logic and persistence for contacts/notes
+    │   ├── __init__.py
+    │   ├── assistent.py       # Contact assistant (AddressBook operations)
+    │   ├── note_assistant.py  # Note assistant (NoteBook operations)
+    │   └── storage.py         # Pickle save/load helpers
+    ├── utils/
+    │   ├── __init__.py
+    │   └── validators.py      # Validation utilities for fields
+    └── view/                  # CLI views and rendering
+        ├── __init__.py
+        ├── view.py            # Base view abstraction
+        └── console/
+            ├── __init__.py
+            ├── completer.py   # Autocompletion for commands, contacts, and notes
+            ├── print_help.py  # Rich-powered help screen
+            ├── tip_toolbar.py # Dynamic bottom toolbar with hints
+            ├── contacts/      # Contact-specific console rendering
+            ├── notes/         # Note-specific console rendering
+            └── tags/          # Tag-specific console rendering
 
 ## Data Storage
-All data is stored locally in .pkl files using Python’s pickle module. This ensures persistence between sessions without requiring a database.
+All data is stored locally in `.pkl` files using Python’s `pickle` module:
+- **Contacts**: `data/addressbook.pkl`
+- **Notes**: `data/notebook.pkl`
+
+The `src/services/storage.py` module contains helper functions to save and load these structures.
 
 ## Configuration
-TBD
+Core configuration and command metadata live in `src/config.py`:
+- `DEFAULT_ADDRESSBOOK_FILENAME`, `DEFAULT_NOTEBOOK_FILENAME` – Paths to pickle files.
+- `UPCOMING_BIRTHDAYS_DAYS` – Number of days ahead to scan for upcoming birthdays.
+- `COMMANDS` – Combined registry of all CLI commands (general, contact, note) used by the controller and console to drive autocompletion and help output.
+
+You can adjust these values to change storage paths or birthday lookahead behavior.
 
 ## Logging
-TBD
+The `logs/` directory is reserved for application logs.  
+At the moment the core application does not write structured logs by default, but this folder can be used to add logging in future enhancements.
 
 ## Authors
 Maksym Kryvenko
