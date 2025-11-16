@@ -1,8 +1,12 @@
 """Assistant for Note and NoteBook operations."""
+
 from typing import Optional
-from src.models import Note, NoteBook, Contact, AddressBook
+from src.models import Note, NoteBook, AddressBook
 from src.services.storage import save_pkl_book
 from src.config import DEFAULT_NOTEBOOK_FILENAME
+from src.models.fields import NoteText
+from datetime import datetime
+from src.errors import NotFoundError
 
 
 class NoteAssistant:
@@ -22,11 +26,17 @@ class NoteAssistant:
 
     def delete_note(self, note_id: str) -> bool:
         """Delete a note by ID."""
-        try:
-            self.notebook.delete_note(note_id)
-            return True
-        except ValueError:
-            return False
+        self.notebook.delete_note(note_id)
+        return True
+
+    def edit_note(self, note_id: str, content: str) -> Note:
+        """Edit a note's content by ID."""
+        note = self.find_note(note_id)
+        if not note:
+            raise NotFoundError(f"Note with id '{note_id}' not found")
+        note.content = NoteText(content)
+        note.updated_at = datetime.now()
+        return note
 
     def find_note(self, note_id: str) -> Optional[Note]:
         """Find a note by ID."""
@@ -35,34 +45,48 @@ class NoteAssistant:
     def add_tags_to_note(self, note_id: str, *tags: str) -> bool:
         """Add tags to a note."""
         note = self.find_note(note_id)
-        if note:
-            note.add_tags(*tags)
-            return True
-        return False
+        if not note:
+            raise NotFoundError(f"Note with id '{note_id}' not found")
+        note.add_tags(*tags)
+        return True
 
     def remove_tag_from_note(self, note_id: str, tag: str) -> bool:
         """Remove a tag from a note."""
         note = self.find_note(note_id)
-        if note:
-            note.remove_tag(tag)
-            return True
-        return False
+        if not note:
+            raise NotFoundError(f"Note with id '{note_id}' not found")
+        if tag not in note.tags:
+            raise NotFoundError(f"Tag '{tag}' not found in note with id '{note_id}'")
+        note.remove_tag(tag)
+        return True
 
     def link_note_to_contact(self, note_id: str, contact: str) -> bool:
         """Link a note to a contact."""
         note = self.find_note(note_id)
-        if note:
-            note.link_to_contact(contact, self.__address_book)
-            return True
-        return False
+        if not note:
+            raise NotFoundError(f"Note with id '{note_id}' not found")
+        note.link_to_contact(contact, self.__address_book)
+        return True
 
     def unlink_note_from_contact(self, note_id: str) -> bool:
         """Unlink a note from a contact."""
         note = self.find_note(note_id)
-        if note:
-            note.unlink_contact()
-            return True
-        return False
+        if not note:
+            raise NotFoundError(f"Note with id '{note_id}' not found")
+        note.unlink_contact()
+        return True
+
+    def search_notes(self, query: str) -> list:
+        """Search notes by tags or contact name."""
+        # Try to search by tags first
+        results = self.search_by_tags(query)
+        if results:
+            return results
+        # Then try to search by contact
+        return self.search_by_contact(query)
+
+    def search(self, query: str) -> list:
+        self.search_by_tags(query.split()) or self.search_by_contact(query)
 
     def search_by_tags(self, *tags: str) -> list:
         """Search notes by tags."""

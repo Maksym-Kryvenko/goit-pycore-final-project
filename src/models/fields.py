@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from src.errors import ValidationError
 from src.utils.validators import check_name, check_email, check_phone, check_date
 
 
@@ -36,7 +37,7 @@ class Name(Field):
     @value.setter
     def value(self, new_value: str):
         if not check_name(new_value):
-            raise ValueError("Name cannot be empty and must not contain digits")
+            raise ValidationError("Name cannot be empty and must not contain digits")
         self._value = new_value.strip()
 
 
@@ -56,7 +57,7 @@ class Phone(Field):
             self._value = None
         else:
             if not check_phone(new_value):
-                raise ValueError("Phone must be +380XX-XXX-XX-XX format")
+                raise ValidationError("Phone must be +380XX-XXX-XX-XX format")
             self._value = self.__normalize_phone(new_value)
 
     def __normalize_phone(self, phone_number: str) -> str:
@@ -66,16 +67,20 @@ class Phone(Field):
 
         Return: str The normalized phone number.
         """
-        phone_number = phone_number.strip().replace(" ", "")
-        phone_number = phone_number[phone_number.index("0") :]
-        found_number = re.fullmatch(
-            r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})",
-            phone_number,
-        )
-        groups = found_number.groups()
-        normalized = f"+38{groups[0]}-{groups[1]}-{groups[2]}-{groups[3]}"
-        _ = normalized[15]  # Ensure if the string is long enough
-        return normalized
+        try:
+            phone_number = phone_number.strip().replace(" ", "")
+            phone_number = phone_number[phone_number.index("0") :]
+            found_number = re.fullmatch(
+                r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})",
+                phone_number,
+            )
+            if not found_number:
+                raise ValidationError("Phone must be +380XX-XXX-XX-XX format")
+            found_number = f"+38{found_number[0]}"
+            _ = found_number[12]  # Ensure if the string is long enough
+            return found_number
+        except (ValueError, IndexError) as e:
+            raise ValidationError("Phone must be +380XX-XXX-XX-XX format") from e
 
 
 class Email(Field):
@@ -94,7 +99,7 @@ class Email(Field):
             self._value = None
         else:
             if not check_email(new_value):
-                raise ValueError("Invalid email format")
+                raise ValidationError("Invalid email format")
             self._value = new_value.strip().lower()
 
 
@@ -132,7 +137,7 @@ class Birthday(Field):
             self._value = None
         else:
             if not check_date(new_value):
-                raise ValueError(
+                raise ValidationError(
                     "Birthday must be in format DD.MM.YYYY and cannot be today or in the future"
                 )
             self._value = datetime.strptime(new_value, "%d.%m.%Y").date()
@@ -153,7 +158,11 @@ class NoteText(Field):
 
     @value.setter
     def value(self, new_value: str):
-        self._value = new_value.strip() if new_value else None
+        # Allow empty strings, just strip whitespace
+        if new_value is None:
+            self._value = None
+        else:
+            self._value = new_value.strip()
 
 
 class NoteTag(Field):

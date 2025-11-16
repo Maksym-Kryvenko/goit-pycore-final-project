@@ -1,11 +1,8 @@
-from src.cli.console_view import ConsoleView
+from src.view.console_view import ConsoleView
 from src.controllers.app_controller import AppController
 from src.services.assistent import Assistent
 from src.services.note_assistant import NoteAssistant
 from src.services.storage import load_data
-
-# from src.cli.parser import parse_input
-# from src.cli.commands import add_contact, change_contact, get_phone, get_all_contacts, add_birthday, show_birthday, birthdays
 
 
 def main():
