@@ -55,6 +55,8 @@ class NoteAssistant:
         note = self.find_note(note_id)
         if not note:
             raise NotFoundError(f"Note with id '{note_id}' not found")
+        if tag not in note.tags:
+            raise NotFoundError(f"Tag '{tag}' not found in note with id '{note_id}'")
         note.remove_tag(tag)
         return True
 
