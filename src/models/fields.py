@@ -61,7 +61,7 @@ class Phone(Field):
 
     def __normalize_phone(self, phone_number: str) -> str:
         """
-        Normalize a phone number to the format +380XXXXXXXXX.
+        Normalize a phone number to the format +380XX-XXX-XX-XX.
         :param phone_number: str The input phone number in various formats.
 
         Return: str The normalized phone number.
@@ -72,9 +72,10 @@ class Phone(Field):
             r"(\d{3})[\s\t()\n-]*(\d{3})[\s\t()\n-]*(\d{2})[\s\t()\n-]*(\d{2})",
             phone_number,
         )
-        found_number = f"+38{found_number[0]}"
-        _ = found_number[12]  # Ensure if the string is long enough
-        return found_number
+        groups = found_number.groups()
+        normalized = f"+38{groups[0]}-{groups[1]}-{groups[2]}-{groups[3]}"
+        _ = normalized[15]  # Ensure if the string is long enough
+        return normalized
 
 
 class Email(Field):
