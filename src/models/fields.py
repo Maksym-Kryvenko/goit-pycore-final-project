@@ -76,9 +76,10 @@ class Phone(Field):
             )
             if not found_number:
                 raise ValidationError("Phone must be +380XX-XXX-XX-XX format")
-            found_number = f"+38{found_number[0]}"
-            _ = found_number[12]  # Ensure if the string is long enough
-            return found_number
+            groups = found_number.groups()
+            normalized = f"+38{groups[0]}-{groups[1]}-{groups[2]}-{groups[3]}"
+            _ = normalized[15]  # Ensure if the string is long enough
+            return normalized
         except (ValueError, IndexError) as e:
             raise ValidationError("Phone must be +380XX-XXX-XX-XX format") from e
 
