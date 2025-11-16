@@ -26,10 +26,14 @@ class Contact:
             self.add_email(email)
 
     def add_phone(self, phone_number):
-        self.phones.append(Phone(phone_number))
+        normalized = Phone(phone_number)
+        if normalized not in self.phones:
+            self.phones.append(normalized)
 
     def add_email(self, email_address):
-        self.emails.append(Email(email_address))
+        normalized = Email(email_address)
+        if normalized not in self.emails:
+            self.emails.append(normalized)
 
     def add_birthday(self, value: str):
         self.birthday = Birthday(value)
